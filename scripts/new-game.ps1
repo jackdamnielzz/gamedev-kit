@@ -22,8 +22,8 @@ New-Item -ItemType Directory -Force -Path $dir | Out-Null
 Set-Location $dir
 git init -q
 
-claude plugin marketplace add jackdamnielzz/gamedev-kit --scope project
-claude plugin install gamedev-kit@gamedev-kit --scope project
+claude plugin marketplace add jackdamnielzz/gamedev-kit --scope project; if ($LASTEXITCODE -ne 0) { throw "Step failed: claude plugin marketplace add jackdamnielzz/gamedev-kit --scope project" }
+claude plugin install gamedev-kit@gamedev-kit --scope project; if ($LASTEXITCODE -ne 0) { throw "Step failed: claude plugin install gamedev-kit@gamedev-kit --scope project" }
 
 Write-Host ""
 Write-Host "Done. In VS Code, start Claude Code and run:  /gamedev-kit:new-game $Name"
