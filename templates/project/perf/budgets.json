@@ -1,0 +1,6 @@
+{
+  "frame_time_p95_ms": 16.7,
+  "draw_calls_max": 150,
+  "js_heap_mb_max": 300,
+  "initial_download_mb_max": 15
+}

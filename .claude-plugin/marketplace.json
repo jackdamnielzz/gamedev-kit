@@ -1,0 +1,15 @@
+{
+  "name": "gamedev-kit",
+  "description": "Niels's game dev kit for Claude Code",
+  "owner": {
+    "name": "Niels",
+    "url": "https://github.com/jackdamnielzz"
+  },
+  "plugins": [
+    {
+      "name": "gamedev-kit",
+      "source": ".",
+      "description": "Game dev stack, reference-first AI art pipeline, NanoGPT reference, indie guide and new-game scaffolding."
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+{
+  "_schema": "One entry per approved reference and per shipped file. kind: reference | shipped. Keys: path, kind, provider, model, recipe, prompt_hash, date, cost_usd, licence, built_from (shipped only: reference paths), build_script_hash, ai_pixels_shipped (true if AI pixels are in the shipped file), human_edited.",
+  "entries": []
+}

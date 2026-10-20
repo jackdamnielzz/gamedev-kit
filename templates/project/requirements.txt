@@ -1,0 +1,3 @@
+# Python tools for art/, audio/ and tools/ (pin exact versions once the project runs)
+pillow>=10
+numpy>=1.26

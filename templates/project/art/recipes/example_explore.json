@@ -1,0 +1,14 @@
+{
+  "name": "explore_units_a",
+  "purpose": "explore",
+  "provider": "gemini",
+  "model": "gemini-nano-banana-2.1",
+  "style": "@art-direction",
+  "prompt": "Design concept of a light scout tank for a top-down strategy game, three-quarter view, chunky readable silhouette, plain flat #808080 background, no text.",
+  "refs": [],
+  "aspect_ratio": "1:1",
+  "resolution": "1K",
+  "size": "1024x1024",
+  "quality": "medium",
+  "n": 1
+}
