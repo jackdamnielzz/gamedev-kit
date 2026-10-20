@@ -13,6 +13,7 @@ Recommended model: Opus for this whole skill (decisions here are expensive to un
 
 ## 1. Check the folder
 
+- This skill runs only where the kit is enabled for the folder (project scope). Check that `.claude/settings.json` lists `gamedev-kit@gamedev-kit` under `enabledPlugins`; keep that file and commit it with the game.
 - List the current folder. If it already contains a game (`package.json`, `src/`, `CLAUDE.md`), stop and ask whether to add the kit to the existing project instead of scaffolding over it. Never overwrite existing files without asking.
 - Check tools: `git`, `node` (≥ 20), `python` (3.10+), `blender` (on Windows, also check `C:\Program Files\Blender Foundation\*\blender.exe`). Report what is missing with one install hint each; Blender is required for the art pipeline but not for scaffolding.
 - Check which image API keys are set (only test whether `GEMINI_API_KEY`, `OPENAI_API_KEY`, `NANOGPT_API_KEY` exist; never print values).

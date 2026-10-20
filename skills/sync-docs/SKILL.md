@@ -15,5 +15,5 @@ The master copy of every document is the repo `jackdamnielzz/gamedev-kit`, folde
 1. Ask the human where their local clone of `gamedev-kit` is (suggest `D:\Programmeren\gamedev-kit`). If there is none, give the clone command: `git clone https://github.com/jackdamnielzz/gamedev-kit.git`.
 2. Make the change in that clone: the right document under `docs/`, and, if a workflow changes, the matching `skills/*/SKILL.md` or file under `templates/project/`. Keep docs in English.
 3. Show the diff and, after the human agrees, commit with a clear message and push.
-4. Tell the human to update the plugin: `claude plugin marketplace update gamedev-kit` then `claude plugin update gamedev-kit@gamedev-kit` (or in a session: `/plugin` → Installed → gamedev-kit → Update now), then start a new session or run `/reload-plugins`.
+4. Tell the human to update the plugin: `claude plugin marketplace update gamedev-kit` then, inside each game folder that uses it, `claude plugin update gamedev-kit@gamedev-kit --scope project` (or in a session: `/plugin` → Installed → gamedev-kit → Update now), then start a new session or run `/reload-plugins`.
 5. Remind the human that the copies in the claude.ai "Game Dev" project should be replaced with the new versions from `docs/`, and that existing games keep their own `CLAUDE.md` and specs unless they ask to adopt the change.

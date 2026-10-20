@@ -14,7 +14,7 @@ How the AI should use it:
 - Once a choice is recorded in a spec, do not re-argue it in later sessions unless the human asks.
 - The human designs and playtests; agents build. When a choice is genuinely ambiguous, ask the human instead of guessing.
 
-How the human should use it: install the `gamedev-kit` Claude Code plugin once at user scope (it carries this document, `AI-ASSET-WORKFLOW.md`, `NANOGPT-API.md` and the indie development guide as on-demand knowledge, plus `/gamedev-kit:new-game` to scaffold a project, `/gamedev-kit:new-asset` to run the reference-first pipeline, `/gamedev-kit:game-concept`, `/gamedev-kit:stack-advisor` and `/gamedev-kit:sync-docs`). Install steps are in the plugin's `README.md`. Without the plugin, copy this document into a new repository as `docs/GAME-STACK.md` and reference it from `CLAUDE.md`. Install Blender once on the machine (and pin the version per game); Claude drives it through Python.
+How the human should use it: enable the `gamedev-kit` Claude Code plugin **per game folder** (project scope, so other software projects never load it; `scripts/new-game.ps1` in the kit repo does this for a new game) (it carries this document, `AI-ASSET-WORKFLOW.md`, `NANOGPT-API.md` and the indie development guide as on-demand knowledge, plus `/gamedev-kit:new-game` to scaffold a project, `/gamedev-kit:new-asset` to run the reference-first pipeline, `/gamedev-kit:game-concept`, `/gamedev-kit:stack-advisor` and `/gamedev-kit:sync-docs`). Install steps are in the plugin's `README.md`. Without the plugin, copy this document into a new repository as `docs/GAME-STACK.md` and reference it from `CLAUDE.md`. Install Blender once on the machine (and pin the version per game); Claude drives it through Python.
 
 Companion documents:
 

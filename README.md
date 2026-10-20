@@ -29,28 +29,39 @@ Skills (Claude loads the knowledge skills by itself when the topic comes up; the
 | `/gamedev-kit:stack-advisor [question]` | Pick stack options, record them in `000-stack.md` |
 | `/gamedev-kit:sync-docs [change]` | Put a lesson or change into this repo (only when you call it) |
 
-## Install (once, on each computer)
+## Use it only in game folders
 
-In a terminal (PowerShell is fine):
+The kit is enabled **per game folder** (project scope), not for your whole computer. Your other software projects never see it.
+
+### New game (easiest)
+
+In PowerShell, from your clone of this repo:
 
 ```
-claude plugin marketplace add jackdamnielzz/gamedev-kit
-claude plugin install gamedev-kit@gamedev-kit --scope user
+.\scripts\new-game.ps1 -Name MyGame            # creates D:\Programmeren\MyGame
+.\scripts\new-game.ps1 -Name MyGame -Root D:\Programmeren\Games
 ```
 
-Or inside a Claude Code session: `/plugin marketplace add jackdamnielzz/gamedev-kit`, then `/plugin install gamedev-kit@gamedev-kit` and choose user scope.
+It creates the folder, runs `git init`, enables the kit for that folder only, and opens VS Code. Then start Claude Code there and run `/gamedev-kit:new-game MyGame`.
 
-`--scope user` makes the kit available in every folder, so every new game folder has it.
+### By hand (new or existing game)
 
-Check: start Claude Code in any folder and type `/gamedev-kit:` — the skills should be listed.
+Inside the game folder:
 
-## Start a new game
+```
+claude plugin marketplace add jackdamnielzz/gamedev-kit --scope project
+claude plugin install gamedev-kit@gamedev-kit --scope project
+```
 
-1. Make an empty folder, e.g. `D:\Programmeren\<game-name>`, and open it in VS Code.
-2. Start Claude Code there and run `/gamedev-kit:new-game <working title>`.
-3. Then run `/gamedev-kit:new-asset <first asset group>` when the art exploration starts.
+This writes `.claude/settings.json` in the game folder. Commit it with the game: on another computer, Claude Code reads it when you open the game folder and asks to install the kit (or run the two commands there again). Use this also to add the kit to existing games such as pins-and-ribbons.
 
-Also needed on the computer: Git, Node 20+, Python 3.10+, Blender (the version gets pinned per game), and one image API key as a user environment variable: `GEMINI_API_KEY`, `OPENAI_API_KEY` or `NANOGPT_API_KEY`. On Windows:
+Check: start Claude Code in the game folder and type `/gamedev-kit:` (the skills are listed). In any other folder they are not.
+
+To remove the kit from one game: `claude plugin uninstall gamedev-kit@gamedev-kit --scope project` in that folder.
+
+### Also needed on the computer
+
+Git, Node 20+, Python 3.10+, Blender (the version gets pinned per game), and one image API key as a user environment variable: `GEMINI_API_KEY`, `OPENAI_API_KEY` or `NANOGPT_API_KEY`. On Windows:
 
 ```
 [Environment]::SetEnvironmentVariable('GEMINI_API_KEY', '<your key>', 'User')
@@ -66,7 +77,7 @@ Restart VS Code afterwards so it sees the variable.
 
 ```
 claude plugin marketplace update gamedev-kit
-claude plugin update gamedev-kit@gamedev-kit
+claude plugin update gamedev-kit@gamedev-kit --scope project   # inside a game folder
 ```
 
 Or in a session: `/plugin` → Installed → gamedev-kit → Update now. New sessions use the new version (or run `/reload-plugins`).
