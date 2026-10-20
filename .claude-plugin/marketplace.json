@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "gamedev-kit",
-      "source": ".",
+      "source": "./",
       "description": "Game dev stack, reference-first AI art pipeline, NanoGPT reference, indie guide and new-game scaffolding."
     }
   ]
