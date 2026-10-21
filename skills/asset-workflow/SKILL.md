@@ -14,6 +14,10 @@ For every game and every new asset group, proactively propose and run the refere
 
 To run the pipeline step by step, use the `new-asset` skill (`/gamedev-kit:new-asset <group>`).
 
+## Choosing an animation route
+
+Image models design, video models or 3D move. More than one facing or a separately turning part: 3D. A single-view character of 64 px or more: image-to-video plus `art/py/video_to_sprites.py`. A small 32–64 px sprite: PixelLab or Retro Diffusion. An image-model sprite sheet is only for designs and key poses. Details and field test: "Choosing an animation route" in the workflow doc.
+
 ## Never assume a style
 
 The game's genre or a stack recipe does not decide its look. Exploration always shows clearly different style options, and the human picks.
@@ -24,7 +28,7 @@ The game's genre or a stack recipe does not decide its look. Exploration always 
 - Guiding principles (what Claude does itself, what it cannot do, push rule, rules for every pipeline)
 - The default pipeline: AI references → Blender (steps 0–8, prompt template, routes A/B/C, compare loop, the three API routes, when to deviate)
 - Image and 2D art (model table, style consistency, local models)
-- Pixel art, sprites and animation
+- Pixel art, sprites and animation (animation routes 1-4, Route 4 video, Choosing an animation route)
 - 3D generation
 - Sound effects · Music and adaptive music · Voice and dialogue
 - NanoGPT · Aggregators, MCP servers and CLIs (for API details load the `nanogpt-api` skill)

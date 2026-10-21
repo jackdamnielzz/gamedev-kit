@@ -11,6 +11,10 @@ Working title: $ARGUMENTS (ask if empty).
 
 Recommended model: Opus for this whole skill (decisions here are expensive to undo). Say so to the human at the start.
 
+## 0. Read the kit first
+
+Before anything else, read `${CLAUDE_PLUGIN_ROOT}/docs/START-HERE.md` and then, in full: `GAME-STACK.md`, `AI-ASSET-WORKFLOW.md` and `indie-game-development-guide.md` (all in `${CLAUDE_PLUGIN_ROOT}/docs/`). Skip a document only if you already read it in full earlier in this session. Give the human the short brief that START-HERE asks for, then continue.
+
 ## 1. Check the folder
 
 - This skill runs only where the kit is enabled for the folder (project scope). Check that `.claude/settings.json` lists `gamedev-kit@gamedev-kit` under `enabledPlugins`; keep that file and commit it with the game.

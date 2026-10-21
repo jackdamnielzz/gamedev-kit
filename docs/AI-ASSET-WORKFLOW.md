@@ -2,6 +2,8 @@
 
 20 October 2026 · Niels. Living version: the claude.ai doc "AI Asset Workflow for Claude-Driven Game Development". Prices and model versions change monthly: re-check provider pages before committing a budget.
 
+**Update 21 October 2026 (2):** added "Choosing an animation route" (image sheet vs. video vs. pixel generator vs. 3D) with a decision rule and the field-test results, and `docs/START-HERE.md`, the standing brief that every session in a game project must read first.
+
 **Update 21 October 2026:** added animation route 4 (image → video model → frames) with the locked video prompt and `art/py/video_to_sprites.py`, which gives all frames one shared crop, pixel grid and palette. See "Route 4" under Pixel art.
 
 **Update 20 October 2026:** the **reference-first pipeline** (AI image model makes reference sheets and UI mockups → the human picks → Claude builds the real asset in Blender or code from those references) is now the default art pipeline for every game. See the section "The default pipeline: AI references → Blender".
@@ -265,6 +267,31 @@ Source: a practitioner thread on r/aigamedev ("My latest Prompt Bible", October 
 
 **Disclosure.** The animation frames are AI pixels that ship: record them in the manifest as `ai_pixels_shipped: true`.
 
+
+### Choosing an animation route
+
+The question for every animated asset: should a model make the motion as a video, or should it draw a sprite sheet with the frames in it? Short answer: **image models design, video models (or 3D) move.** Never let a general image model draw the motion itself.
+
+| Route | Best for | Strengths | Weaknesses | Cost (Oct 2026) |
+| --- | --- | --- | --- | --- |
+| **Image model draws a sheet** ("draw a punch in 6 frames", GPT Image / Nano Banana) | Designs, variation grids, single poses, key-pose sketches | Cheap, fast, good for choosing a look | Every frame is drawn separately: size, details and part positions drift between frames; poses do not flow; uneven spacing on the sheet. **Not for shipped motion** | About $0.03–0.15 per sheet |
+| **Image → video model → frames** (route 4: WAN 3, Veo) | Side-view or single-facing characters and creatures of about 64 px and up; building and effect loops | Smooth, physically logical motion; identity stays stable because the model keeps seeing the same body; far more frames than needed, so you pick key poses | One camera angle only; needs a locked prompt and scripted cleanup; motion is "too smooth" until you thin it out | About $0.25 per 5 s clip at 480p, audio off |
+| **Pixel-art generator animations** (PixelLab `animate_character`, Retro Diffusion) | Small sprites of 32–64 px; 4- or 8-direction characters; tilesets | Real pixel grid out of the box, palette input, little cleanup | Few frames; best at small sizes; some drift between frames and directions; built for bipeds and quadrupeds | $12–50/month (PixelLab); $0.07–0.25 per animation (RD) |
+| **3D → rendered sprites** (route 1: Blender or code-built model) | Anything with 8–32 facings, separate turrets or hulls, vehicles, buildings, units that must match each other exactly | Perfect consistency over all directions and frames; animatable parts; re-render any time | Needs a model (built from references or image-to-3D); hand-drawn charm must come from shading, palette and cleanup | Mostly time; image-to-3D about $0.30–1.50 per model |
+
+**Decision rule**
+
+1. Does the asset need more than one facing, or a part that turns separately (RTS units, turrets, top-down vehicles)? Use **3D** (route 1).
+2. Is it a single-view character or creature of about 64 px or larger (fighter, platformer, story game)? Use **video** (route 4). Start from a clean, approved sprite.
+3. Is it a small sprite (32–64 px), or a 4/8-direction character for a top-down RPG? Use **PixelLab or Retro Diffusion**, with the approved reference and the project palette.
+4. Use image-model sheets only to choose designs and key poses, never as shipped frames.
+
+**Field test (21 October 2026, Scrapheart robot punch).** A Nano Banana 2.1 start frame (16:9, flat green) went to WAN 3.0 via NanoGPT (480p, 5 s, audio off, seed 42, about $0.25) with the locked prompt from route 4. The first take was usable. `video_to_sprites.py --height 96 --colors 32 --outline` gave 60 frames of 138×96 px. Every frame shares one grid and one palette, and the subject height stayed within 87–93 px, so there was no scale drift. Colours, visor glow and outline survived the cleanup. Lessons:
+
+- **480p is enough** for sprites around 100 px tall: about 4 video pixels per sprite pixel.
+- **Thin the frames.** 30 fps video gives 60 frames at 12 fps; pixel animation reads better with 8–12 frames and holds on key poses (wind-up, full extension, recovery).
+- **Big moves twist the body.** In a hard punch the model turned the robot's back towards the camera. Add "the chest keeps facing the viewer" if you do not want that.
+- **Do not auto-snap a clean start frame.** `unfake` and a k-means snap both made the already-clean AI start frame worse: broken lines, lost highlights, and a palette dominated by the green background. Check the start frame by eye (Sprite Grid if needed) and do the real cleanup after the video, where the background is keyed out first.
 
 ## 3D generation
 
