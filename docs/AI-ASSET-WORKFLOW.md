@@ -2,6 +2,8 @@
 
 20 October 2026 · Niels. Living version: the claude.ai doc "AI Asset Workflow for Claude-Driven Game Development". Prices and model versions change monthly: re-check provider pages before committing a budget.
 
+**Update 21 October 2026:** added animation route 4 (image → video model → frames) with the locked video prompt and `art/py/video_to_sprites.py`, which gives all frames one shared crop, pixel grid and palette. See "Route 4" under Pixel art.
+
 **Update 20 October 2026:** the **reference-first pipeline** (AI image model makes reference sheets and UI mockups → the human picks → Claude builds the real asset in Blender or code from those references) is now the default art pipeline for every game. See the section "The default pipeline: AI references → Blender".
 
 ## Summary
@@ -22,7 +24,7 @@ NanoGPT is the default gateway for one key and one MCP server; the Gemini API (G
 | Consistent characters, portraits (2D story games) | Nano Banana 2.1 / Pro + style refs | Gemini direct or NanoGPT | Strongest multi-reference |
 | Bulk assets in one style | FLUX.2 / Klein LoRA trained on approved references | fal.ai | Style lock-in at scale |
 | Key art, Steam capsule | GPT Image 2.5 or Nano Banana Pro, or a human artist | NanoGPT or direct | Highest stakes, human final say |
-| Pixel-art characters, animation | PixelLab or Retro Diffusion (fed with the approved references) | Their own MCP | Real pixel grid, directions |
+| Pixel-art characters, animation | PixelLab or Retro Diffusion (fed with the approved references); single-view animation also via image-to-video (WAN 3, Veo) + `video_to_sprites.py` | Their own MCP; replicate.com / Gemini for video | Real pixel grid, directions; video: smooth motion, one angle |
 | Retro and UI sound effects | ZzFX / jsfxr | Code in repo | No licence or disclosure |
 | Realistic sound effects | ElevenLabs Sound Effects v2 | NanoGPT (prototype), direct (ship) | Loop flag, commercial on paid plan |
 | Hero music tracks | Suno v6 Premier, by hand | Manual download | Best quality, stems |
@@ -238,6 +240,31 @@ Pixel-art games follow the same reference-first rule: the look is designed with 
 1. **Reference → Blender → sprites (default, most consistent):** build the model from the approved turnaround (Route A or B above), animate parts or the rig, then let a Claude-written Blender script render 8 directions with a transparent background and pack the sheet. Optionally pixelate with `unfake`. This is the route for robots, vehicles, units and buildings.
 2. **2D generators:** PixelLab `animate_character`, Retro Diffusion animations (start frame 32–256 px), Ludo or SpriteCook, with the approved reference as input. Fast, but frames can drift.
 3. **Image-to-3D for organic units:** Tripo or Meshy from the approved front view, auto-rig and retarget, then render through the same Blender rig as route 1.
+4. **Image → video model → frames:** a grid-fitted start frame plus a locked prompt to an image-to-video model (WAN 3, Veo, GPT Solar), then `art/py/video_to_sprites.py`. Cheap and smooth, but one camera angle only. Details below.
+
+### Route 4: image → video model → frames (single-view animation)
+
+Source: a practitioner thread on r/aigamedev ("My latest Prompt Bible", October 2026), checked against our own test. Good for side-view or single-facing games (fighters, platformers, story games, building and VFX loops). Not for units that need 8–32 facings or a turret that turns separately from the hull: a video model gives one camera angle only, so use route 1 for those.
+
+1. **Variation grid.** One image call asks for 12 variations of one concept in a 4×3 grid on a flat background, starting with "Pixel art, 32-bit" and a very detailed description (body, outfit, colours, weapon and which hand holds it, pose). Twelve options for the price of one; the human picks one.
+2. **Grid-fit the pick.** Run the chosen sprite through grid fitting (`unfake`, Pixel Snapper or Sprite Grid) and clean it up by hand. This sprite is the start frame for the animation; the cleaner it is, the less the video drifts.
+3. **Let Claude expand the animation idea into a locked prompt.** The prompt that worked:
+   - keeps the camera angle of the image the whole time (for example three-quarters towards the viewer, facing right);
+   - describes the action beat by beat (three heavy steps, a jump, the overhead slam, hold the landed pose, return to idle and stay still to the end of the clip);
+   - repeats the full character description and says "the same face, costume, colours, proportions and pixel-art style, the same size in every frame";
+   - pins props: "the weapon stays one solid object of the same size, never longer, bent or glowing";
+   - forbids every effect: no motion trails, swoosh, streak, arc, impact flash, dust, cracks or anything drawn in the air or on the ground (effects are added in the engine);
+   - locks the camera: no pan or zoom, the subject stays fully inside the frame, also at the top of a jump;
+   - asks for a flat, solid, unchanging background colour with no floor, shadow or scenery; no text, no sound.
+4. **Generate the clip** with an image-to-video model and the start frame attached: WAN 3 via replicate.com (about $0.10–0.13 per clip in the thread, first take usable), or GPT Solar / Gemini (Veo) as alternatives. Log provider, model, prompt and cost in the manifest.
+5. **Video to sprites in one pass:** `python art/py/video_to_sprites.py clip.mp4 --out build/art/<name> --height 64 --colors 24 [--palette art/palette.json] [--outline]`. The script keys out the background, then gives **every frame the same crop box, the same pixel grid and the same palette**, removes orphan pixels and writes `sheet.png` + `sheet.json`, `preview.gif` and `compare.png`. Snapping frames one by one makes the sprite flicker and change size between frames, which is the main way this route goes wrong.
+6. **Read the report.** The script prints the pixels changed between frames and the subject height range. Big jumps mark frames to cut or fix; height that wanders means the model drifted in scale.
+7. **Sprite Grid pass** on the sheet (dithering off, no retro palette), hand fixes on key poses, then re-run the lint so nothing off-palette slips back in. Trim to the frames you need (often every 2nd frame at 24 fps, or `--fps 12`).
+
+**Background colour.** Pick a key colour the subject does not contain: green for red, purple or grey subjects, magenta (`#FF00FF`) when the subject has greens or olives. The script's `--drop-shadow` option also removes cast shadows on the screen, but it removes everything of the key's hue with it (our test lost a soldier's olive helmet and trousers), so prevent shadows in the prompt instead.
+
+**Disclosure.** The animation frames are AI pixels that ship: record them in the manifest as `ai_pixels_shipped: true`.
+
 
 ## 3D generation
 
