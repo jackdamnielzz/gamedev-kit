@@ -11,8 +11,8 @@ Task about to start: $ARGUMENTS
 
 1. Read `${CLAUDE_PLUGIN_ROOT}/docs/START-HERE.md` in full with the Read tool.
 2. Work out which case applies:
-   - **New game**: the folder has no `docs/specs/000-stack.md`. Read all of these in full, in order: `GAME-STACK.md`, `AI-ASSET-WORKFLOW.md`, `indie-game-development-guide.md` (all in `${CLAUDE_PLUGIN_ROOT}/docs/`), plus the overview of `NANOGPT-API.md`.
-   - **Existing game**: read the project's `CLAUDE.md`, `docs/concept.md` and every file in `docs/specs/`. Then read the kit sections that match the task (art and animation: `AI-ASSET-WORKFLOW.md`; architecture, testing and tooling: `GAME-STACK.md`; scope, release and marketing: the indie guide). If the task is a new asset group, a new major system or a stack change, read those documents in full.
+   - **New game**: the folder has no `docs/specs/000-stack.md`. Read all of these in full, in order: `GAME-STACK.md`, `AI-ASSET-WORKFLOW.md`, `indie-game-development-guide.md`, `STORY-AND-NARRATIVE.md` (all in `${CLAUDE_PLUGIN_ROOT}/docs/`), plus the overview of `NANOGPT-API.md`.
+   - **Existing game**: read the project's `CLAUDE.md`, `docs/concept.md` and every file in `docs/specs/`. Then read the kit sections that match the task (art and animation: `AI-ASSET-WORKFLOW.md`; architecture, testing and tooling: `GAME-STACK.md`; scope, release and marketing: the indie guide; story, dialogue and events: `STORY-AND-NARRATIVE.md`). If the task is a new asset group, a new major system or a stack change, read those documents in full.
 3. Reply to the human with a brief of at most 10 lines:
    - the rules from START-HERE that matter for this task;
    - the animation route you would use, if art is involved;

@@ -32,7 +32,8 @@ if (source === 'compact' || source === 'resume') {
     '  2. ' + docs('GAME-STACK.md'),
     '  3. ' + docs('AI-ASSET-WORKFLOW.md'),
     '  4. ' + docs('indie-game-development-guide.md'),
-    '  5. ' + docs('NANOGPT-API.md') + ' (overview now, the rest before the first generation call)',
+    '  5. ' + docs('STORY-AND-NARRATIVE.md'),
+    '  6. ' + docs('NANOGPT-API.md') + ' (overview now, the rest before the first generation call)',
     'Then give the human a short brief (max 10 lines): the rules you will follow, open questions, and the Claude model you recommend for the next step. Then continue with /gamedev-kit:new-game.',
     'Do this even if the human\'s first message asks you to start building right away; tell them you are reading the kit first.'
   );
@@ -42,7 +43,8 @@ if (source === 'compact' || source === 'resume') {
     '  - read ' + docs('START-HERE.md') + ' (the standing rules);',
     '  - read the project CLAUDE.md, docs/concept.md and every file in docs/specs/ (project decisions win over the kit);',
     '  - for the task at hand, read the matching kit sections: art/animation -> ' + docs('AI-ASSET-WORKFLOW.md') +
-      '; architecture/testing/tooling -> ' + docs('GAME-STACK.md') + '; scope/release/marketing -> ' + docs('indie-game-development-guide.md') + '.',
+      '; architecture/testing/tooling -> ' + docs('GAME-STACK.md') + '; scope/release/marketing -> ' + docs('indie-game-development-guide.md') +
+      '; story/dialogue/events -> ' + docs('STORY-AND-NARRATIVE.md') + '.',
     'Re-read the full documents before a new asset group, a new major system or a stack change.'
   );
 }

@@ -10,7 +10,8 @@ This is the standing brief for any agent working in a game folder where the game
 2. `GAME-STACK.md`: stack, architecture, repo layout, workflow, recipes per game type
 3. `AI-ASSET-WORKFLOW.md`: the reference-first art pipeline, the animation decision guide, generators, cleanup, licences and Steam disclosure
 4. `indie-game-development-guide.md`: lifecycle, scope, design, production, marketing
-5. `NANOGPT-API.md`: only the overview now; read the rest before the first generation call
+5. `STORY-AND-NARRATIVE.md`: story without text overload, storylet systems, pacing, text UX
+6. `NANOGPT-API.md`: only the overview now; read the rest before the first generation call
 
 Then reply to the human with a short brief, at most 10 lines: the rules you will follow, the questions you still need answered, and your recommended Claude model for the next step. Only then start.
 
@@ -20,7 +21,8 @@ Then reply to the human with a short brief, at most 10 lines: the rules you will
 - Before each task, read the kit sections that apply to it:
   - art and animation: `AI-ASSET-WORKFLOW.md`;
   - architecture, testing and tooling: `GAME-STACK.md`;
-  - scope, release and marketing: the indie guide.
+  - scope, release and marketing: the indie guide;
+  - story, dialogue, events and narrative systems: `STORY-AND-NARRATIVE.md`.
 - Re-read the full documents before a new asset group, a new major system, or a stack change.
 
 Do not skim from memory. The documents change. The repo `jackdamnielzz/gamedev-kit` is the master copy, and the plugin's `docs/` folder holds the installed version of it.
@@ -45,6 +47,7 @@ Do not skim from memory. The documents change. The repo `jackdamnielzz/gamedev-k
 9. **Deterministic, testable game code.** Keep the sim and render layers separate. All content is data. Run tests and bot runs before reporting done. Read your own screenshots and previews before calling anything finished.
 10. **Settings.** Game ideas and settings are not based on the Netherlands. Avoid real franchises' names and trademarks; describe looks in your own words, never "in the style of" a living artist or "like <existing game unit>".
 11. **Never print or commit API keys.**
+12. **Story lives in the verbs.** Tell the story through mechanics, the world and short reactive lines, not walls of text. Every line is short, never repeats and refers to something the player did; everything is skippable. Details and the checklist are in `STORY-AND-NARRATIVE.md`.
 
 ## 3. Where things are
 
@@ -54,6 +57,7 @@ Do not skim from memory. The documents change. The repo `jackdamnielzz/gamedev-k
 | A new group of art assets | `/gamedev-kit:new-asset <group>` |
 | One-page concept | `/gamedev-kit:game-concept [idea]` |
 | Stack choice | `/gamedev-kit:stack-advisor [question]` |
+| Story, dialogue and event systems | `STORY-AND-NARRATIVE.md` (skill `gamedev-kit:story-design`) |
 | Put a lesson back into the kit | `/gamedev-kit:sync-docs [change]` |
 | Image, video and audio API calls | `NANOGPT-API.md`, `tools/gen_image.py` |
 | Animation video to clean frames | `art/py/video_to_sprites.py` |

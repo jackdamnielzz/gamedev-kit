@@ -13,6 +13,7 @@ Niels's Claude Code plugin for building games with Claude Code: the stack catalo
 | `docs/AI-ASSET-WORKFLOW.md` | Reference-first pipeline, generators per asset type, prices, licences, Steam AI disclosure |
 | `docs/NANOGPT-API.md` | NanoGPT API reference |
 | `docs/indie-game-development-guide.md` | Lifecycle, design, production, marketing, release |
+| `docs/STORY-AND-NARRATIVE.md` | Story without text overload: principles, case lessons, storylet engine, pacing, anti-repetition, text UX, checklist |
 | `skills/` | The plugin's skills (below) |
 | `hooks/` | SessionStart hook that briefs every session in a game folder (below) |
 | `templates/project/` | Files copied into every new game by `/gamedev-kit:new-game` |
@@ -25,6 +26,7 @@ Skills (Claude loads the knowledge skills by itself when the topic comes up; the
 | `gamedev-kit:asset-workflow` | Knowledge: AI-ASSET-WORKFLOW.md, including the push rule for the reference-first pipeline |
 | `gamedev-kit:nanogpt-api` | Knowledge: NANOGPT-API.md |
 | `gamedev-kit:indie-guide` | Knowledge: indie guide |
+| `gamedev-kit:story-design` | Knowledge: STORY-AND-NARRATIVE.md |
 | `/gamedev-kit:briefing [task]` | Read the docs (all of them for a new game, the relevant parts for an existing one) and give a short brief |
 | `/gamedev-kit:new-game [title]` | Scaffold a new game in the current folder |
 | `/gamedev-kit:new-asset <group>` | Run the reference-first pipeline for one asset group |
@@ -36,7 +38,7 @@ Skills (Claude loads the knowledge skills by itself when the topic comes up; the
 
 When a Claude Code session starts in a game folder where the kit is enabled, the hook `hooks/session-start.js` adds a briefing to Claude's context. You don't need to type anything:
 
-- **New game** (no `docs/specs/000-stack.md` yet): Claude must first read START-HERE, GAME-STACK, AI-ASSET-WORKFLOW and the indie guide in full, give you a short brief, and only then start, even if your first message says "start building".
+- **New game** (no `docs/specs/000-stack.md` yet): Claude must first read START-HERE, GAME-STACK, AI-ASSET-WORKFLOW, the indie guide and STORY-AND-NARRATIVE in full, give you a short brief, and only then start, even if your first message says "start building".
 - **Existing game:** Claude reads START-HERE, the project's `CLAUDE.md` and `docs/specs/`, plus the kit sections that fit the task, and re-reads everything before a new asset group or major system.
 - **Resumed or compacted session:** a short reminder of the rules.
 
