@@ -6,6 +6,8 @@ A portable guide for an AI agent or developer who uses PixelLab as the art gener
 
 Sources: the OpenAPI spec at https://api.pixellab.ai/v2/openapi.json (102 paths, the source of truth for every parameter), https://api.pixellab.ai/v2/llms.txt, https://www.pixellab.ai/llms-full.txt, the terms of service, and free API calls made on **23 October 2026** (`/balance`, `/pro-flash/capabilities`, `/pro-flash/cost`). Endpoints, sizes and prices change often: check the spec and the cost endpoints before relying on a number in this file.
 
+**Verified live (23 October 2026):** `tools/gen_image.py --provider pixellab` with model `pixen`, 64×64, `view: side`, `direction: east`: one call, billed `{"type": "generations", "generations": 1.0}`, a clean 64×64 RGBA sprite on a true pixel grid. Two things to expect: the raw output had 62 colours (palette cleanup is still needed when no `target_palette` is sent), and it included a cast drop shadow (say "no shadow" in the prompt if the engine draws shadows).
+
 ---
 
 ## 1. What PixelLab is
