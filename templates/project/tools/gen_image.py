@@ -235,12 +235,13 @@ def _pixellab_poll(job_id, key, timeout_s=1800):
             with urllib.request.urlopen(req, timeout=120) as resp:
                 job = json.load(resp)
         except urllib.error.HTTPError as e:
-            if e.code in (423, 429, 503, 529):
+            if e.code in (404, 423, 429, 503, 529):  # 404 can occur while a job is still being registered
                 continue
             raise SystemExit(f"HTTP {e.code} while polling: {e.read().decode('utf-8', 'replace')[:300]}")
-        if job.get("status") == "completed":
+        status = str(job.get("status", "")).lower()
+        if status in ("completed", "complete", "succeeded", "success", "done"):
             return job
-        if job.get("status") == "failed":
+        if status in ("failed", "error", "cancelled", "canceled"):
             raise SystemExit(f"PixelLab job failed: {json.dumps(job.get('last_response'))[:500]}")
     raise SystemExit(f"PixelLab job {job_id} still running after {timeout_s}s; poll it later")
 

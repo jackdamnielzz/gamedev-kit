@@ -38,6 +38,6 @@ The game's genre or a stack recipe does not decide its look. Exploration always 
 
 ## Tools in the project
 
-A project scaffolded with `/gamedev-kit:new-game` has: `tools/gen_image.py` (provider switch, dry-run by default), `art/py/contact_sheet.py`, `art/py/slice_refs.py`, `art/py/extract_palette.py`, `art/py/compare.py`, `art/py/video_to_sprites.py` (AI animation video → grid-true frames with one shared crop, grid and palette), `art/blender/lib/refs.py`, `art/blender/sprite_unit.py`. If a project lacks them, copy them from `${CLAUDE_PLUGIN_ROOT}/templates/project/`.
+A project scaffolded with `/gamedev-kit:new-game` has: `tools/gen_image.py` (provider switch, dry-run by default), `art/py/contact_sheet.py`, `art/py/slice_refs.py`, `art/py/extract_palette.py`, `art/py/compare.py`, `art/py/video_to_sprites.py` (AI animation video → grid-true frames with one shared crop, grid and palette), `art/blender/lib/refs.py`, `art/blender/sprite_unit.py`, and for pixel-art games that use PixelLab only: `tools/pixellab/` (`create_character_v3.py`, shared `client.py`; see its README). If a project lacks them, copy them from `${CLAUDE_PLUGIN_ROOT}/templates/project/`.
 
 Never print or commit API keys. Ask before any generation run estimated above the budget in `docs/specs/000-stack.md`.

@@ -16,4 +16,5 @@ Key reminders (details in the doc):
 - Every image is `{"type": "base64", "base64": …, "format": "png"}`; sides of pixen and Pro Flash images are multiples of 4. Never rescale pixel-art references; run upscaled art through `/unzoom` first.
 - Use `target_palette` with the project palette (hex) for style lock; character rotation input must face south.
 - Licence: commercial use on all plans, but no training of models on the output.
-- For repeatable runs use `tools/gen_image.py --provider pixellab` with a recipe; use the MCP tools for exploration in a conversation.
+- For repeatable runs use `tools/gen_image.py --provider pixellab` with a recipe, and `tools/pixellab/create_character_v3.py` for characters (pixel art only; dry run by default, `--resume` after an interruption, never pays twice); use the MCP tools for exploration in a conversation.
+- Poll characters with `GET /characters/{id}`; download PixelLab files with a browser User-Agent (the file host answers 403 otherwise).

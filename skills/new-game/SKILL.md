@@ -35,7 +35,7 @@ Do NOT ask the human to pick an art style here and do NOT infer one from the gen
 
 ## 3. Copy the templates
 
-Copy everything under `${CLAUDE_PLUGIN_ROOT}/templates/project/` into the current folder, keeping the folder structure. Use the Read and Write tools (works the same on Windows and Linux). Write `gitignore.template` as `.gitignore`. Create the empty folders `art/refs/`, `audio/sfx/`, `audio/music/`, `public/assets/` and `build/`. Then:
+Copy everything under `${CLAUDE_PLUGIN_ROOT}/templates/project/` into the current folder, keeping the folder structure. Use the Read and Write tools (works the same on Windows and Linux). Write `gitignore.template` as `.gitignore`. Copy `tools/pixellab/` only when the game is pixel art and uses PixelLab as its art route (pixel art only); otherwise leave it out. Create the empty folders `art/refs/`, `audio/sfx/`, `audio/music/`, `public/assets/` and `build/`. Then:
 
 - Fill in the placeholders in angle brackets in `CLAUDE.md`, `docs/concept.md`, `docs/specs/000-stack.md` and `docs/specs/art-direction.md` from the answers. Leave the style paragraph in `art-direction.md` empty until the exploration round.
 - Record the chosen stack row, pinned versions (Node, Python, Blender as found), reference route and budget in `000-stack.md`, each with a dated entry under Decisions.

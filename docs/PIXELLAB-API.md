@@ -230,7 +230,13 @@ PixelLab can run the whole pipeline when a project chooses it (record the choice
 6. **Cleanup:** `reduce-colors` across all frames with `palette_image` (one palette per animation), `correct-pixelart` at strength 0.1, then the kit's lint and a manual Sprite Grid pass. Never AI-upscale; never rescale pixel art.
 7. **Log:** every call's `usage`, endpoint, model, prompt hash, seed and ids go to `build/gen/log.jsonl`, and every approved or shipped file to `assets/manifest.json` with licence `PixelLab subscription: commercial use, no model training on output`.
 
-Use the **MCP** tools for exploration in a conversation, and **`tools/gen_image.py --provider pixellab`** (recipes in `art/recipes/`) for anything repeatable.
+Use the **MCP** tools for exploration in a conversation, and **`tools/gen_image.py --provider pixellab`** (recipes in `art/recipes/`) for anything repeatable. For characters, the template has **`tools/pixellab/create_character_v3.py`** (pixel-art games only; see `tools/pixellab/README.md`): dry run by default, budget guard, saves the character id at once so an interrupted run can `--resume` for free, refuses to pay twice for the same name, and writes per-direction PNGs, a spritesheet + JSON, a consistency report and a labelled preview.
+
+**Field lessons (23 October 2026):**
+
+- Poll a character with `GET /characters/{id}` until `status` is `completed`; a script that only watched the background job kept waiting after the character was already done.
+- Rotation and animation files are served from PixelLab's file host, which answers **403 to Python's default User-Agent**: send a normal browser User-Agent when downloading.
+- A v3 rotation of a 64×64 sprite was billed 1 generation, measured from the balance before and after; the figure height stayed within 61–63 px over all 8 directions.
 
 ## 10. Recommended client pattern
 
