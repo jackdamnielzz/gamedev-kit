@@ -230,7 +230,34 @@ PixelLab can run the whole pipeline when a project chooses it (record the choice
 6. **Cleanup:** `reduce-colors` across all frames with `palette_image` (one palette per animation), `correct-pixelart` at strength 0.1, then the kit's lint and a manual Sprite Grid pass. Never AI-upscale; never rescale pixel art.
 7. **Log:** every call's `usage`, endpoint, model, prompt hash, seed and ids go to `build/gen/log.jsonl`, and every approved or shipped file to `assets/manifest.json` with licence `PixelLab subscription: commercial use, no model training on output`.
 
-Use the **MCP** tools for exploration in a conversation, and **`tools/gen_image.py --provider pixellab`** (recipes in `art/recipes/`) for anything repeatable. For characters, the template has **`tools/pixellab/create_character_v3.py`** (pixel-art games only; see `tools/pixellab/README.md`): dry run by default, budget guard, saves the character id at once so an interrupted run can `--resume` for free, refuses to pay twice for the same name, and writes per-direction PNGs, a spritesheet + JSON, a consistency report and a labelled preview.
+Use the **MCP** tools for exploration in a conversation, and **`tools/gen_image.py --provider pixellab`** (recipes in `art/recipes/`) for anything repeatable. For characters, the template has **`tools/pixellab/create_character_v3.py`** (section 9.1).
+
+### 9.1 The character script (pixel art only)
+
+`templates/project/tools/pixellab/` is copied into a new game only when the game is pixel art and uses PixelLab. It holds `client.py` (shared PixelLab client) and `create_character_v3.py`; full details in its `README.md`.
+
+```
+python tools/pixellab/create_character_v3.py hero --sprite art/refs/characters/hero_south.png --description "..."         # dry run
+python tools/pixellab/create_character_v3.py hero --sprite art/refs/characters/hero_south.png --description "..." --run   # generate
+python tools/pixellab/create_character_v3.py hero --resume            # download after an interruption (free)
+python tools/pixellab/create_character_v3.py hero --character-id <id> # download an existing character (free)
+python tools/pixellab/create_character_v3.py hero --rebuild           # redo all post-processing offline (free)
+```
+
+| Stage | What happens |
+| --- | --- |
+| Check | Sprite at most 256×256, transparency, binary alpha, room above and below; warns that v3 treats the sprite as facing south |
+| Cost guard | Dry run by default; refuses above `--max-generations` (default 5) or when the balance is too low; measures the real cost from the balance before and after |
+| Never pays twice | The character id is saved to `build/gen/characters/<name>/state.json` the moment PixelLab returns it; a second `--run` for the same name is refused (`--force` to pay again) |
+| Wait and download | Polls `GET /characters/{id}` until `completed`; downloads every direction with a browser User-Agent; raw files kept as `<direction>.png` |
+| Palette snap | All directions onto ONE palette (`art/palette.json` when it has 8+ colours, else a shared auto palette of `--colours`, default 32), binary alpha, orphan pixels removed → `final/<direction>.png` |
+| Lint | Per direction: palette colours only, no semi-transparent pixels, no orphan pixels, not an upscaled image |
+| Sheets and previews | `sheet.png` + `sheet.json` (one row, equal cells, never rescaled, bottom-centre pivot), a labelled 4× preview and a turnaround GIF in `build/previews/` |
+| Review page | `build/previews/<name>_review.html`, self-contained: raw vs final, 1× and 4×, light and dark backgrounds, the GIF, warnings and lint results; **the human approves the character here** |
+| Phaser export | `export/<name>.png` + `export/<name>.json` (TexturePacker JSON Hash, frames `<name>/<direction>`, pivot bottom-centre): `this.load.atlas('<name>', '<name>.png', '<name>.json')` |
+| Records | `report.json` (heights, colours, palette, lint), a line in `build/gen/log.jsonl`, and manifest entries (`ai_pixels_shipped: true`, `approved: false`, PixelLab licence) when `assets/manifest.json` exists |
+
+Generating more (animations, batches of characters) always starts with a dry run that shows the cost; nothing that spends generations runs without `--run` and the human's approval.
 
 **Field lessons (23 October 2026):**
 

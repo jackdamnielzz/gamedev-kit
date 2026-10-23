@@ -18,6 +18,7 @@ Niels's Claude Code plugin for building games with Claude Code: the stack catalo
 | `skills/` | The plugin's skills (below) |
 | `hooks/` | SessionStart hook that briefs every session in a game folder (below) |
 | `templates/project/` | Files copied into every new game by `/gamedev-kit:new-game` |
+| `templates/project/tools/pixellab/` | **Pixel art only:** PixelLab scripts (character in 4/8 directions with palette snap, lint, review page and Phaser export); copied only into pixel-art games that use PixelLab. See its `README.md` and `docs/PIXELLAB-API.md` section 9.1 |
 
 Skills (Claude loads the knowledge skills by itself when the topic comes up; the workflows you can also type):
 
