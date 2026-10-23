@@ -31,7 +31,7 @@ The game's genre or a stack recipe does not decide its look. Exploration always 
 - Pixel art, sprites and animation (animation routes 1-4, Route 4 video, Choosing an animation route)
 - 3D generation
 - Sound effects · Music and adaptive music · Voice and dialogue
-- NanoGPT · Aggregators, MCP servers and CLIs (for API details load the `nanogpt-api` skill; for PixelLab load the `pixellab-api` skill)
+- NanoGPT · Aggregators, MCP servers and CLIs (for API details load the `nanogpt-api` skill; for PixelLab load the `pixellab-api` skill; for our own 3D/pixel workshop load the `asset-forge` skill)
 - Post-processing and verification · The asset manifest
 - Legal, licensing and Steam AI disclosure · Licence traps
 - Decision checklist for a new game

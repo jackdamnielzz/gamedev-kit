@@ -61,4 +61,5 @@ Do not skim from memory. The documents change. The repo `jackdamnielzz/gamedev-k
 | Put a lesson back into the kit | `/gamedev-kit:sync-docs [change]` |
 | Image, video and audio API calls | `NANOGPT-API.md`, `tools/gen_image.py` |
 | Pixel-art generation (PixelLab) | `PIXELLAB-API.md`, `tools/gen_image.py --provider pixellab` |
+| 3D props, 3D→pixel sprites, effects, Godot export (our own tool) | `ASSET-FORGE.md` (skill `gamedev-kit:asset-forge`) |
 | Animation video to clean frames | `art/py/video_to_sprites.py` |

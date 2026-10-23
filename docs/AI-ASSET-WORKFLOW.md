@@ -240,7 +240,7 @@ Pixel-art games follow the same reference-first rule: the look is designed with 
 
 ### Animation routes
 
-1. **Reference → Blender → sprites (default, most consistent):** build the model from the approved turnaround (Route A or B above), animate parts or the rig, then let a Claude-written Blender script render 8 directions with a transparent background and pack the sheet. Optionally pixelate with `unfake`. This is the route for robots, vehicles, units and buildings.
+1. **Reference → Blender → sprites (default, most consistent):** build the model from the approved turnaround (Route A or B above), animate parts or the rig, then let a Claude-written Blender script render 8 directions with a transparent background and pack the sheet. Optionally pixelate with `unfake`. This is the route for robots, vehicles, units and buildings. **Asset Forge** (`ASSET-FORGE.md`) does the same without Blender: build with commands, then `render_sprites` with a fixed `pixelsPerMetre`, camera `elevation` and the project palette (house style), including normal maps and Godot SpriteFrames.
 2. **2D generators:** PixelLab `animate_character`, Retro Diffusion animations (start frame 32–256 px), Ludo or SpriteCook, with the approved reference as input. Fast, but frames can drift.
 3. **Image-to-3D for organic units:** Tripo or Meshy from the approved front view, auto-rig and retarget, then render through the same Blender rig as route 1.
 4. **Image → video model → frames:** a grid-fitted start frame plus a locked prompt to an image-to-video model (WAN 3, Veo, GPT Solar), then `art/py/video_to_sprites.py`. Cheap and smooth, but one camera angle only. Details below.
@@ -438,6 +438,7 @@ Register two or three MCP servers at user scope and call everything else with sm
 | ElevenLabs | Official, hosted | `https://api.elevenlabs.io/v1/mcp` (OAuth); the local server is archived |
 | Tripo | Vendor | `VAST-AI-Research/tripo-mcp` |
 | Blender | Official (Blender Lab) and community | Optional, for interactive exploration of a reference build; headless recipe scripts stay the source of truth |
+| Asset Forge | Our own (github.com/jackdamnielzz/asset-forge) | `claude mcp add asset-forge -- node <folder>/src/mcp/index.js`; 107 commands for 3D props, 3D→pixel sprites, effects, tilesets, Godot export and full PixelLab access; see `ASSET-FORGE.md` |
 
 **MCP or script?** Use MCP for exploration in a conversation. For anything repeatable, put the call in `tools/gen_*.py` with the recipe in the repo: it is reproducible, testable and cheaper on context. Keep every API key in an environment variable, never in a committed file, and give each game its own key with a daily spending cap.
 
