@@ -81,3 +81,11 @@ The kit's reference-first rule still holds: designs come from approved reference
 - Built-in pixel-art characters and the default iso tiles and parallax are simple: fine for prototypes, not at the level of hand-drawn or PixelLab sprites.
 - The test suite (`npm test`, `npm run test:godot`) checks every command and real Godot 4 import; outside AI calls are only tested against a mock.
 - Keys live in `workspace/secrets.json`, which git ignores; commands never return keys.
+
+## 7. Field test (23 October 2026): a bar counter next to a PixelLab character
+
+- Built a bar counter with two stools from primitives (oak and dark-wood presets, brass rail, chrome taps) in one `run_batch`; `check_quality` scored 100.
+- `render_sprites` with `directions: 1`, `elevation: 20` and `pixelsPerMetre: 34` matched the scale and camera of a 64 px PixelLab character drawn in "low top-down" view; with the character's palette the two read as one family. Cost: 0 generations.
+- Lessons: give the project palette **neutral greys** (chrome otherwise snaps to cream); `outlineStyle: "solid"` with the darkest palette colour matches PixelLab's dark outlines better than `selout`; brighter lighting presets wash out wood, so pick darker material colours or the `dramatic` preset.
+- In Godot 4.6 (Compatibility renderer) the normal map made a single `PointLight2D` light the counter top warmly while the front stayed dark: real depth at pixel scale.
+- A single PixelLab prop looks more hand-drawn; Asset Forge wins on consistency across many props, normal maps and free changes. Repainting an Asset Forge render with PixelLab (`edit-image-pixen` or `pixellab_run` with `{ render: <id> }`) combines both.

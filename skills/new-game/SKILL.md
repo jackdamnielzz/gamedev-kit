@@ -42,6 +42,8 @@ Copy everything under `${CLAUDE_PLUGIN_ROOT}/templates/project/` into the curren
 
 ## 4. Set up the code project
 
+If the human chose **Godot**, follow `${CLAUDE_PLUGIN_ROOT}/docs/GODOT.md` instead of the web steps below (project settings, folder layout, headless import, tests, a first screenshot), and skip the npm parts.
+
 Following GAME-STACK.md for the chosen recipe: `git init`, `npm create vite@latest . -- --template vanilla-ts` (or set up by hand if the folder is not empty), install the chosen renderer (Phaser / PixiJS / Three.js), zod, Vitest, fast-check, Playwright, ESLint + Prettier. Create the `src/sim`, `src/game`, `src/render`, `src/ui`, `src/audio`, `src/data` layers with a minimal deterministic sim, a passing unit test and a determinism test. Add the npm scripts from the "npm scripts" table that apply now (`dev`, `build`, `check`, `validate`, `refs:prepare`, `assets:compare`); leave the rest for later specs. Install the Python requirements from `requirements.txt` in a venv (`.venv`).
 
 Run `npm run check` and paste the result.

@@ -44,6 +44,7 @@ The default is a TypeScript browser game built with Vite. Art follows the refere
 | --- | --- | --- | --- |
 | Language | TypeScript (strict) | — | Always TypeScript; strict types are a guard rail for agents |
 | Build / dev server | Vite | esbuild alone | Tiny prototypes only |
+| Engine | TypeScript web stack (this document) | **Godot 4** (see `GODOT.md`) | Steam/desktop first, 2D lights with normal maps, particles and shaders, or assets from Asset Forge's Godot export |
 | 2D rendering | Phaser | PixiJS; raw Canvas 2D | PixiJS for custom engines or heavy sprite counts; Canvas 2D for very simple games |
 | 3D rendering | Three.js | Babylon.js | Babylon when you want more built-in engine features (physics, GUI, inspector) |
 | Entity model | Plain typed objects + systems | bitECS; miniplex | ECS when entity counts exceed a few thousand |

@@ -13,6 +13,7 @@ Niels's Claude Code plugin for building games with Claude Code: the stack catalo
 | `docs/AI-ASSET-WORKFLOW.md` | Reference-first pipeline, generators per asset type, prices, licences, Steam AI disclosure |
 | `docs/NANOGPT-API.md` | NanoGPT API reference |
 | `docs/PIXELLAB-API.md` | PixelLab API reference: models, every endpoint and setting, sizes, costs, licence, pipeline use |
+| `docs/GODOT.md` | Godot 4 recipe for agent-built games: when to choose it, working without the editor, pixel-art settings, 2D lights with normal maps, architecture, assets, CI and release |
 | `docs/ASSET-FORGE.md` | Asset Forge, our own AI-driven 3D and pixel-art asset workshop: connecting it, its command groups, where it fits in the pipeline, when not to use it |
 | `docs/indie-game-development-guide.md` | Lifecycle, design, production, marketing, release |
 | `docs/STORY-AND-NARRATIVE.md` | Story without text overload: principles, case lessons, storylet engine, pacing, anti-repetition, text UX, checklist |
@@ -30,6 +31,7 @@ Skills (Claude loads the knowledge skills by itself when the topic comes up; the
 | `gamedev-kit:nanogpt-api` | Knowledge: NANOGPT-API.md |
 | `gamedev-kit:pixellab-api` | Knowledge: PIXELLAB-API.md |
 | `gamedev-kit:asset-forge` | Knowledge: ASSET-FORGE.md |
+| `gamedev-kit:godot` | Knowledge: GODOT.md |
 | `gamedev-kit:indie-guide` | Knowledge: indie guide |
 | `gamedev-kit:story-design` | Knowledge: STORY-AND-NARRATIVE.md |
 | `/gamedev-kit:briefing [task]` | Read the docs (all of them for a new game, the relevant parts for an existing one) and give a short brief |
