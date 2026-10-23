@@ -2,7 +2,7 @@
 
 > **Master copy:** the GitHub repo `jackdamnielzz/gamedev-kit`, folder `docs/`. Copies elsewhere follow the repo; change the repo first.
 
-23 October 2026 · Niels. Asset Forge (https://github.com/jackdamnielzz/asset-forge, version 0.1.0) is Niels's own tool: a small Blender-like 3D and pixel-art asset workshop in which **every action is a command an AI can call**. This page tells a game project when to use it, how to connect it, and where it fits in the kit's pipeline. The tool's own documentation is complete and generated from the code: `llms.txt`, `docs/API.md` (every command and setting) and `docs/openapi.json` in its repository, or live at `http://127.0.0.1:7777/llms.txt` and `/docs` while it runs.
+23 October 2026, updated 24 October 2026 for version 0.2.0 · Niels. Asset Forge (https://github.com/jackdamnielzz/asset-forge, version 0.2.0; its `CHANGELOG.md` lists every change) is Niels's own tool: a small Blender-like 3D and pixel-art asset workshop in which **every action is a command an AI can call**. This page tells a game project when to use it, how to connect it, and where it fits in the kit's pipeline. The tool's own documentation is complete and generated from the code: `llms.txt`, `docs/API.md` (every command and setting) and `docs/openapi.json` in its repository, or live at `http://127.0.0.1:7777/llms.txt` and `/docs` while it runs.
 
 ## 1. What it is
 
@@ -82,7 +82,20 @@ The kit's reference-first rule still holds: designs come from approved reference
 - The test suite (`npm test`, `npm run test:godot`) checks every command and real Godot 4 import; outside AI calls are only tested against a mock.
 - Keys live in `workspace/secrets.json`, which git ignores; commands never return keys.
 
-## 7. Field test (23 October 2026): a bar counter next to a PixelLab character
+## 7. Version notes
+
+**0.2.0 (24 October 2026):** a review release (about 50 fixes, no new commands). What matters for game pipelines:
+
+- MCP clients now see generators, file actions and paid AI services as **not read-only**, so the client asks before running them; expect more approval prompts.
+- Recipes and library items keep same-named parts apart (three parts called "leg" stay three legs); copies of cut objects keep their own holes.
+- Colour names (`"blue"`) and short hex (`"#f80"`) are stored properly; variations and house styles no longer darken them.
+- Exports of objects with the same name get separate files (`post.glb`, `post_2.glb`).
+- The seed now varies every generator (lamp post, coin, potion, sword, level kit, character).
+- The 1.8 m size reference never appears in sprite sheets; renders always restore the window state.
+- `save_project_as` refuses an existing name unless `overwrite: true`; `delete_library_item` asks for `force: true` when the open project still uses the item.
+- Shared (password) mode is stricter: no file paths or local-network downloads from other computers, also inside `run_batch`; lockout after five wrong passwords.
+
+## 8. Field test (23 October 2026): a bar counter next to a PixelLab character
 
 - Built a bar counter with two stools from primitives (oak and dark-wood presets, brass rail, chrome taps) in one `run_batch`; `check_quality` scored 100.
 - `render_sprites` with `directions: 1`, `elevation: 20` and `pixelsPerMetre: 34` matched the scale and camera of a 64 px PixelLab character drawn in "low top-down" view; with the character's palette the two read as one family. Cost: 0 generations.
