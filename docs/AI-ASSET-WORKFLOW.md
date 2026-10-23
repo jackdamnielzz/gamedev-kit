@@ -160,21 +160,22 @@ The goal is a faithful, game-ready interpretation, not a pixel copy: simplify de
 - Claude takes an in-game screenshot (Playwright) and checks readability at real size; the human approves hero assets.
 - The manifest entry for the shipped asset records the build script hash, the references it was built from (with their provider and model), whether AI pixels were projected into it, and the licence.
 
-### Getting the images: three routes
+### Getting the images: four routes
 
-All three routes are fine; pick one per game in `000-stack.md` and keep the key in an environment variable, never in the repo. `tools/gen_image.py` hides the difference behind a `--provider` switch.
+All four routes are fine; pick one per game in `000-stack.md` and keep the key in an environment variable, never in the repo. `tools/gen_image.py` hides the difference behind a `--provider` switch.
 
 | Route | Key (environment variable) | Model ids (October 2026) | Notes |
 | --- | --- | --- | --- |
 | Gemini API direct (Google) | `GEMINI_API_KEY` from Google AI Studio, on a project with billing enabled | `gemini-nano-banana-2.1` (default), `gemini-3-pro-image` (Nano Banana Pro), `gemini-3.1-flash-image` (Nano Banana 2) | Google documents image generation for 2.1 on its Interactions API; implement the wrapper against the current "Image generation" page and verify the request shape on the first call. 1K/2K/4K output, up to 14 references, configurable thinking level, Batch API supported. No free API tier for 2.1 (secondary source); transparency not documented |
 | OpenAI API direct | `OPENAI_API_KEY` | `gpt-image-2.5-flare` (fast default), `gpt-image-2.5-sunburst` | Images API; `background: "transparent"` supported (PNG/WebP); up to 16 reference images; mask editing |
 | NanoGPT | `NANOGPT_API_KEY` | `nano-banana-2`, `nano-banana-pro`, `openai/gpt-image-2.5/flare/text-to-image` (+ `/edit`), `gpt-image-2` | One balance for everything; see NANOGPT-API.md. Check the catalogue for a Nano Banana 2.1 id before assuming it is listed. `gpt-image-2` on NanoGPT has no `background` parameter |
+| PixelLab direct (pixel-art games) | `PIXELLAB_API_KEY` | `pixen` (fast), `pro` (generate-image-v2: 4–64 candidates per call at small sizes), `pro-flash` (one best image) | Pixel-art-native models, so exploration options are already real pixel art; billed in subscription generations; `target_palette` puts every pixel on the project palette; the same account then makes the characters, animations, tiles and UI. Full reference: `PIXELLAB-API.md` |
 
 Practical notes:
 
 - Ask for one image per call, inspect it, then decide; batches of variants only in the exploration step.
 - For Nano Banana (no documented transparency), generate on a flat key colour and remove the background with a keying script or BiRefNet. Reference sheets do not need transparency at all.
-- Downscale reference images to about 1024 px and under 1.5 MB before attaching them (NanoGPT rejected a 3.7 MB 2048-px PNG).
+- Downscale reference images to about 1024 px and under 1.5 MB before attaching them (NanoGPT rejected a 3.7 MB 2048-px PNG). Exception: pixel-art references for PixelLab go at their native size and are never rescaled; upscaled pixel art goes through PixelLab's `/unzoom` first.
 - Log `cost` per call and keep a per-game daily cap; exploration plus reference sheets for a small game usually costs a few dollars.
 
 ### When to deviate

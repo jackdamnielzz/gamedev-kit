@@ -12,6 +12,7 @@ Niels's Claude Code plugin for building games with Claude Code: the stack catalo
 | `docs/GAME-STACK.md` | Stack, architecture, repo layout, workflow, CI, recipes per game type, templates |
 | `docs/AI-ASSET-WORKFLOW.md` | Reference-first pipeline, generators per asset type, prices, licences, Steam AI disclosure |
 | `docs/NANOGPT-API.md` | NanoGPT API reference |
+| `docs/PIXELLAB-API.md` | PixelLab API reference: models, every endpoint and setting, sizes, costs, licence, pipeline use |
 | `docs/indie-game-development-guide.md` | Lifecycle, design, production, marketing, release |
 | `docs/STORY-AND-NARRATIVE.md` | Story without text overload: principles, case lessons, storylet engine, pacing, anti-repetition, text UX, checklist |
 | `skills/` | The plugin's skills (below) |
@@ -25,6 +26,7 @@ Skills (Claude loads the knowledge skills by itself when the topic comes up; the
 | `gamedev-kit:game-stack` | Knowledge: GAME-STACK.md |
 | `gamedev-kit:asset-workflow` | Knowledge: AI-ASSET-WORKFLOW.md, including the push rule for the reference-first pipeline |
 | `gamedev-kit:nanogpt-api` | Knowledge: NANOGPT-API.md |
+| `gamedev-kit:pixellab-api` | Knowledge: PIXELLAB-API.md |
 | `gamedev-kit:indie-guide` | Knowledge: indie guide |
 | `gamedev-kit:story-design` | Knowledge: STORY-AND-NARRATIVE.md |
 | `/gamedev-kit:briefing [task]` | Read the docs (all of them for a new game, the relevant parts for an existing one) and give a short brief |
@@ -76,7 +78,7 @@ To remove the kit from one game: `claude plugin uninstall gamedev-kit@gamedev-ki
 
 ### Also needed on the computer
 
-Git, Node 20+, Python 3.10+, Blender (the version gets pinned per game), and one image API key as a user environment variable: `GEMINI_API_KEY`, `OPENAI_API_KEY` or `NANOGPT_API_KEY`. On Windows:
+Git, Node 20+, Python 3.10+, Blender (the version gets pinned per game), and one image API key as a user environment variable: `GEMINI_API_KEY`, `OPENAI_API_KEY`, `NANOGPT_API_KEY` or `PIXELLAB_API_KEY`. On Windows:
 
 ```
 [Environment]::SetEnvironmentVariable('GEMINI_API_KEY', '<your key>', 'User')

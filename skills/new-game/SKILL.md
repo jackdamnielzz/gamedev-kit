@@ -20,7 +20,7 @@ Before anything else, read `${CLAUDE_PLUGIN_ROOT}/docs/START-HERE.md` and then, 
 - This skill runs only where the kit is enabled for the folder (project scope). Check that `.claude/settings.json` lists `gamedev-kit@gamedev-kit` under `enabledPlugins`; keep that file and commit it with the game.
 - List the current folder. If it already contains a game (`package.json`, `src/`, `CLAUDE.md`), stop and ask whether to add the kit to the existing project instead of scaffolding over it. Never overwrite existing files without asking.
 - Check tools: `git`, `node` (≥ 20), `python` (3.10+), `blender` (on Windows, also check `C:\Program Files\Blender Foundation\*\blender.exe`). Report what is missing with one install hint each; Blender is required for the art pipeline but not for scaffolding.
-- Check which image API keys are set (only test whether `GEMINI_API_KEY`, `OPENAI_API_KEY`, `NANOGPT_API_KEY` exist; never print values).
+- Check which image API keys are set (only test whether `GEMINI_API_KEY`, `OPENAI_API_KEY`, `NANOGPT_API_KEY`, `PIXELLAB_API_KEY` exist; never print values).
 
 ## 2. Ask the decision questions
 
@@ -28,7 +28,7 @@ Read `${CLAUDE_PLUGIN_ROOT}/docs/GAME-STACK.md` (sections "Stack overview" and "
 
 1. One-line pitch and genre; which stack recipe row is closest (or "none").
 2. 2D or 3D; target platforms (web, Steam, both); input (mouse+keyboard, controller, touch).
-3. Reference route for images: Gemini direct (Nano Banana 2.1, default), OpenAI direct (GPT Image 2.5) or NanoGPT. Daily generation budget in USD.
+3. Reference route for images: Gemini direct (Nano Banana 2.1, default), OpenAI direct (GPT Image 2.5), NanoGPT, or PixelLab (pixel-art games; budget in generations). Daily generation budget in USD or generations.
 4. Language of in-game content and docs (default English).
 
 Do NOT ask the human to pick an art style here and do NOT infer one from the genre. The style is chosen in the exploration round (step 5).

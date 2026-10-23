@@ -1,0 +1,13 @@
+{
+  "name": "explore_characters_a",
+  "purpose": "explore",
+  "provider": "pixellab",
+  "model": "pro",
+  "style": "@art-direction",
+  "prompt": "Design options for a side-view game character, full body, standing idle, facing right, readable silhouette, transparent background, no text.",
+  "refs": [],
+  "size": "64x64",
+  "background": "transparent",
+  "palette": "@palette",
+  "n": 1
+}

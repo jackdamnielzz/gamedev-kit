@@ -60,4 +60,5 @@ Do not skim from memory. The documents change. The repo `jackdamnielzz/gamedev-k
 | Story, dialogue and event systems | `STORY-AND-NARRATIVE.md` (skill `gamedev-kit:story-design`) |
 | Put a lesson back into the kit | `/gamedev-kit:sync-docs [change]` |
 | Image, video and audio API calls | `NANOGPT-API.md`, `tools/gen_image.py` |
+| Pixel-art generation (PixelLab) | `PIXELLAB-API.md`, `tools/gen_image.py --provider pixellab` |
 | Animation video to clean frames | `art/py/video_to_sprites.py` |

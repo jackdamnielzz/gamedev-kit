@@ -10,7 +10,7 @@ The full workflow lives in `${CLAUDE_PLUGIN_ROOT}/docs/AI-ASSET-WORKFLOW.md`. Re
 
 ## The push rule
 
-For every game and every new asset group, proactively propose and run the reference-first pipeline. Do not start modelling, drawing or writing final UI from a text description alone. Exceptions: greybox placeholders before the vertical slice, and assets the human explicitly says to build without references. If no image API key is set (`GEMINI_API_KEY`, `OPENAI_API_KEY` or `NANOGPT_API_KEY`), say so and ask the human to set one; do not silently skip the step.
+For every game and every new asset group, proactively propose and run the reference-first pipeline. Do not start modelling, drawing or writing final UI from a text description alone. Exceptions: greybox placeholders before the vertical slice, and assets the human explicitly says to build without references. If no image API key is set (`GEMINI_API_KEY`, `OPENAI_API_KEY`, `NANOGPT_API_KEY` or `PIXELLAB_API_KEY`), say so and ask the human to set one; do not silently skip the step.
 
 To run the pipeline step by step, use the `new-asset` skill (`/gamedev-kit:new-asset <group>`).
 
@@ -31,7 +31,7 @@ The game's genre or a stack recipe does not decide its look. Exploration always 
 - Pixel art, sprites and animation (animation routes 1-4, Route 4 video, Choosing an animation route)
 - 3D generation
 - Sound effects · Music and adaptive music · Voice and dialogue
-- NanoGPT · Aggregators, MCP servers and CLIs (for API details load the `nanogpt-api` skill)
+- NanoGPT · Aggregators, MCP servers and CLIs (for API details load the `nanogpt-api` skill; for PixelLab load the `pixellab-api` skill)
 - Post-processing and verification · The asset manifest
 - Legal, licensing and Steam AI disclosure · Licence traps
 - Decision checklist for a new game

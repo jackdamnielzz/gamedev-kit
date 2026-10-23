@@ -30,7 +30,7 @@ For every task, tell the human which Claude model you recommend (Opus: coordinat
 - Follow AI-ASSET-WORKFLOW.md for which generator to use per asset type.
 - Every AI image (reference or shipped) has a recipe in art/recipes/ and an entry in assets/manifest.json (provider, model, date, cost, licence); shipped assets list the references they were built from.
 - Read the contact sheet, comparison or spectrogram before reporting an asset done. The human approves hero assets.
-- Never print or commit API keys (GEMINI_API_KEY, OPENAI_API_KEY, NANOGPT_API_KEY). Ask before any generation run estimated above $<budget>.
+- Never print or commit API keys (GEMINI_API_KEY, OPENAI_API_KEY, NANOGPT_API_KEY, PIXELLAB_API_KEY). Ask before any generation run estimated above $<budget>.
 
 ## Working rules
 - Touch only the files your task brief assigns to you.
