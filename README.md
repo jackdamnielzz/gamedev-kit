@@ -13,6 +13,7 @@ Niels's Claude Code plugin for building games with Claude Code: the stack catalo
 | `docs/AI-ASSET-WORKFLOW.md` | Reference-first pipeline, generators per asset type, prices, licences, Steam AI disclosure |
 | `docs/NANOGPT-API.md` | NanoGPT API reference |
 | `docs/PIXELLAB-API.md` | PixelLab API reference: models, every endpoint and setting, sizes, costs, licence, pipeline use |
+| `docs/TRIPO.md` | Tripo guide: API v3 reference, settings and quality practices for characters, creatures and props, rigging and animation, Blender pipeline to 8-direction sprites, costs, licence |
 | `docs/GODOT.md` | Godot 4 recipe for agent-built games: when to choose it, working without the editor, pixel-art settings, 2D lights with normal maps, architecture, assets, CI and release |
 | `docs/ASSET-FORGE.md` | Asset Forge, our own AI-driven 3D and pixel-art asset workshop: connecting it, its command groups, where it fits in the pipeline, when not to use it |
 | `docs/indie-game-development-guide.md` | Lifecycle, design, production, marketing, release |
@@ -30,6 +31,7 @@ Skills (Claude loads the knowledge skills by itself when the topic comes up; the
 | `gamedev-kit:asset-workflow` | Knowledge: AI-ASSET-WORKFLOW.md, including the push rule for the reference-first pipeline |
 | `gamedev-kit:nanogpt-api` | Knowledge: NANOGPT-API.md |
 | `gamedev-kit:pixellab-api` | Knowledge: PIXELLAB-API.md |
+| `gamedev-kit:tripo-api` | Knowledge: TRIPO.md |
 | `gamedev-kit:asset-forge` | Knowledge: ASSET-FORGE.md |
 | `gamedev-kit:godot` | Knowledge: GODOT.md |
 | `gamedev-kit:indie-guide` | Knowledge: indie guide |

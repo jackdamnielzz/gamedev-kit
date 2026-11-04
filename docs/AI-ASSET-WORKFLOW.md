@@ -296,7 +296,7 @@ The question for every animated asset: should a model make the motion as a video
 
 ## 3D generation
 
-Image-to-3D is Route B of the default pipeline: its input is always an approved reference image, never a raw text prompt. Tripo is the default for game models that need rigging and animation; TRELLIS.2 is the free self-hosted option. Do not self-host Hunyuan3D open weights from the Netherlands: their licence excludes the EU.
+Image-to-3D is Route B of the default pipeline: its input is always an approved reference image, never a raw text prompt. Tripo is the default for game models that need rigging and animation; TRELLIS.2 is the free self-hosted option. Do not self-host Hunyuan3D open weights from the Netherlands: their licence excludes the EU. The full Tripo guide (API v3, settings, rigging, animation, Blender sprite pipeline) is `TRIPO.md`; Tripo's v2 API was shut down on 2026-10-31.
 
 | Service | Price | Topology control | Rigging | Output licence |
 | --- | --- | --- | --- | --- |
@@ -436,7 +436,7 @@ Register two or three MCP servers at user scope and call everything else with sm
 | Retro Diffusion | Official | `https://mcp.retrodiffusion.ai/mcp` |
 | PixelLab | Official | `https://api.pixellab.ai/mcp` |
 | ElevenLabs | Official, hosted | `https://api.elevenlabs.io/v1/mcp` (OAuth); the local server is archived |
-| Tripo | Vendor | `VAST-AI-Research/tripo-mcp` |
+| Tripo | Vendor | `VAST-AI-Research/tripo-mcp` (Blender bridge only, stale since 2025; use the REST API v3, see `TRIPO.md`) |
 | Blender | Official (Blender Lab) and community | Optional, for interactive exploration of a reference build; headless recipe scripts stay the source of truth |
 | Asset Forge | Our own (github.com/jackdamnielzz/asset-forge) | `claude mcp add asset-forge -- node <folder>/src/mcp/index.js`; 107 commands for 3D props, 3D→pixel sprites, effects, tilesets, Godot export and full PixelLab access; see `ASSET-FORGE.md` |
 
