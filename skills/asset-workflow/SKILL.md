@@ -26,7 +26,7 @@ The game's genre or a stack recipe does not decide its look. Exploration always 
 
 - Summary (asset type → default tool → route)
 - Guiding principles (what Claude does itself, what it cannot do, push rule, rules for every pipeline)
-- The default pipeline: AI references → Blender (steps 0–8, prompt template, routes A/B/C, compare loop, the three API routes, when to deviate)
+- The default pipeline: AI references → Blender (steps 0–8, prompt template, routes A/B/C, compare loop, the four image routes, when to deviate)
 - Image and 2D art (model table, style consistency, local models)
 - Pixel art, sprites and animation (animation routes 1-4, Route 4 video, Choosing an animation route)
 - 3D generation

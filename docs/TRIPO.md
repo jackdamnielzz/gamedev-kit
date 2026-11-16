@@ -256,7 +256,7 @@ Starting points. Models and settings are sourced; the numeric face budgets are *
 | **Quadruped / monster** (hounds) | `v3.1` or P2 multiview, neutral standing pose | as secondary; rig with `quadruped` | Sprites: 8k–20k. Real-time: 4k–10k |
 | **Prop** (weapons, chests, torches) | `v3.1` single image, or P1/P2 for speed | `standard` texture, `smart_low_poly`, or P2 `face_limit` 150–2,000 | Sprites: 500–3,000. Real-time: 500–5,000 |
 
-Why so low for sprites: detail is invisible once the render is downscaled to 64–128 px, so face count mainly costs rig time and weight problems. Rigging fails on very heavy meshes (keep under about 300k polygons, a hard upper bound). For real-time use the docs' own range is 10k–50k for web/mobile and 50k–100k for game-ready PC: the table is deliberately well under that for a 640×360 isometric game. Reseller guidance: P1 for speed, P2 for cleanest topology and quad export, 3.1 for maximum quality.
+Why so low for sprites: detail is invisible once the render is downscaled to 64–128 px, so face count mainly costs rig time and weight problems. Rigging fails on very heavy meshes (keep under about 300k polygons, a hard upper bound). For real-time use the docs' own range is 10k–50k for web/mobile and 50k–100k for game-ready PC: the table is deliberately well under that for a low-resolution game (for example 640×360) with a fixed isometric camera. Reseller guidance: P1 for speed, P2 for cleanest topology and quad export, 3.1 for maximum quality.
 
 ### 5.5 Texture, PBR and delight
 
@@ -347,10 +347,10 @@ Everything here is general Blender knowledge unless stated: **verify operators a
 2. **Actions and NLA.** The glTF importer creates one action per animation: list `bpy.data.actions`, assign with `arm.animation_data.action = act`, set `scene.frame_start/end` from `act.frame_range`. Push each action to its own NLA track if a single scene file is wanted.
 3. **Normalise.** Check scale and facing after import (Tripo's GLB scale and axis are not documented: section 10). Apply transforms, put the origin at the feet, face the model toward a fixed "south".
 4. **Re-material** to the project palette and lighting: Tripo's Principled BSDF is kept only for base colour. Lower metallic and roughness influence, bake or keep base colour, quantise to the project palette (post-process step or a node), and light with the **fixed project rig**: one key light from the upper left, a rim light, flat fill, no emission. Decimate modifier (collapse, ratio 0.3–0.5) only on meshes without shape keys and test the modifier order against the Armature modifier.
-5. **Camera.** Orthographic, rotation X about 60° (true 2:1 dimetric is 54.736°; the kit's `world_to_screen` is 2:1, match it), Z 45°. Fix `ortho_scale` so the tallest pose of the tallest animation fits.
+5. **Camera.** Orthographic, rotation X about 60° (true 2:1 dimetric is 54.736°; match the game's own world-to-screen projection, which is 2:1 in most isometric games), Z 45°. Fix `ortho_scale` so the tallest pose of the tallest animation fits.
 6. **Directions.** Parent the model to an empty and rotate the **empty** in 45° steps (8 directions). Never rotate the camera or lights, so lighting stays identical across directions.
 7. **Render settings.** `scene.render.film_transparent = True`, PNG RGBA, Eevee (or Workbench with flat lighting for speed), filter size 0.5–1.0. Render at **2–4× the final cell** (for example 256–512 px for a 64–128 px result), then **downscale** (box or nearest, per the project look) and optionally palette-reduce. Outline via Freestyle or an inverted-hull shell if readability needs it. Shadows: prefer a blob-shadow sprite in the engine (consistent and simple) over a shadow-catcher pass.
-8. **Frame rate.** 8–12 fps for the Diablo-2 feel; the sim runs 30 ticks per second, so 10 fps is every third tick. Every animation must share the frame count rule of its own cycle, and every animation must have the same direction count (a requirement of the directional-sprite helpers).
+8. **Frame rate.** 8–12 fps for the Diablo-2 feel; pick a rate that divides the game's sim tick rate (with 30 ticks per second, 10 fps is every third tick). Every animation must share the frame count rule of its own cycle, and every animation of one character must have the same direction count, so the engine can pick a direction the same way for every clip.
 9. **Pack.** Rows = directions (8), columns = frames. Name loose frames `<char>_<anim>_<dir>_<frame>.png`, pack with Pillow (no TexturePacker needed) to `<char>_<anim>.png` plus a **JSON sidecar** (cell size, rows/columns, directions order, fps, loop flag, anchor).
 10. **Godot 4.** Build `SpriteFrames` from the JSON in a script. Animation names are `<anim>_<dir>` (for example `walk_ne`); the direction is chosen in code with `round(angle / (TAU / 8))`, mapped through the iso projection. The Godot "Blender Spritesheet Import Plugin" (MIT, v0.0.1, very early) does something similar; a paid "8 Directions Render" Blender add-on exists. A Pillow script is simpler and under our control.
 
@@ -449,7 +449,7 @@ With P2 textured (110–130) instead of H3.1, the total is about 245–265 credi
 
 ## 10. Gaps and things to verify on first live use
 
-Run one cheap end-to-end test (prop → humanoid → rig → one retarget) and record the answers here and in `docs/ROADMAP.md`.
+Run one cheap end-to-end test (prop → humanoid → rig → one retarget) and record the answers here (through `/gamedev-kit:sync-docs`) and in the game's `docs/MADE-WITH-AI.md`.
 
 - **Preset id format:** `preset:walk` or `walk`; `preset:biped:walk` on v1.0.
 - **Web vs API credits:** separate pools? Which plan prices are real (official page returned 403)?

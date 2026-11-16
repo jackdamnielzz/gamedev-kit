@@ -16,7 +16,8 @@ Chosen from GAME-STACK.md (gamedev-kit). Decisions here are final unless the hum
 
 | Layer | Choice | Why (if not the default) |
 | --- | --- | --- |
-| Renderer | <Phaser / PixiJS / Three.js> | |
+| Engine | <TypeScript web stack / Godot 4> | |
+| Renderer | <Phaser / PixiJS / Three.js; with Godot: Compatibility / Forward+> | |
 | Entity model | <plain objects + systems> | |
 | Physics | <none / custom / Rapier> | |
 | UI | <DOM overlay> | |
@@ -25,15 +26,16 @@ Chosen from GAME-STACK.md (gamedev-kit). Decisions here are final unless the hum
 
 ## Art and audio
 
-- Reference route: <gemini | openai | nanogpt>, main reference model <gemini-nano-banana-2.1 | gpt-image-2.5-flare>
+- Reference route: <gemini | openai | nanogpt | pixellab>, main reference model <gemini-nano-banana-2.1 | gpt-image-2.5-flare | pixen / pro / pro-flash>
 - Build routes in use: <A Blender from primitives / B image-to-3D + Blender / C code-built UI / direct images>
 - Base resolution or polygon budget: <e.g. 640×360 integer-scaled / 3k tris per unit>
-- Generation budget: <USD per day>, ask before any run above <USD>
+- Generation budget: <USD per day, or PixelLab generations per day>, ask before any run above <USD or generations>
 - Audio direction: <code SFX / ElevenLabs / Suno hero tracks / voice yes-no>
 
 ## Pinned versions
 
 - Node <version>, Python <version>, Blender <version>
+- Godot <exact version and path of the console executable; delete this line for a web-stack game>
 
 ## Performance budgets
 

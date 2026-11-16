@@ -13,7 +13,7 @@ Recommended model: Opus for this whole skill (decisions here are expensive to un
 
 ## 0. Read the kit first
 
-Before anything else, read `${CLAUDE_PLUGIN_ROOT}/docs/START-HERE.md` and then, in full: `GAME-STACK.md`, `AI-ASSET-WORKFLOW.md` and `indie-game-development-guide.md` (all in `${CLAUDE_PLUGIN_ROOT}/docs/`). Skip a document only if you already read it in full earlier in this session. Give the human the short brief that START-HERE asks for, then continue.
+Before anything else, read `${CLAUDE_PLUGIN_ROOT}/docs/START-HERE.md` and then, in full and in this order: `GAME-STACK.md`, `AI-ASSET-WORKFLOW.md`, `indie-game-development-guide.md` and `STORY-AND-NARRATIVE.md`, plus the overview of `NANOGPT-API.md` (all in `${CLAUDE_PLUGIN_ROOT}/docs/`). Skip a document only if you already read it in full earlier in this session. Give the human the short brief that START-HERE asks for, then continue.
 
 ## 1. Check the folder
 
@@ -27,7 +27,7 @@ Before anything else, read `${CLAUDE_PLUGIN_ROOT}/docs/START-HERE.md` and then, 
 Read `${CLAUDE_PLUGIN_ROOT}/docs/GAME-STACK.md` (sections "Stack overview" and "Stack recipes by game type") and the "Decision checklist for a new game" in `${CLAUDE_PLUGIN_ROOT}/docs/AI-ASSET-WORKFLOW.md`. Then ask, in one round (AskUserQuestion if available), only what is not already clear from the conversation:
 
 1. One-line pitch and genre; which stack recipe row is closest (or "none").
-2. 2D or 3D; target platforms (web, Steam, both); input (mouse+keyboard, controller, touch).
+2. 2D or 3D; target platforms (web, Steam, both); input (mouse+keyboard, controller, touch); engine: the TypeScript web stack (default) or Godot 4 (see "When to choose Godot" in `${CLAUDE_PLUGIN_ROOT}/docs/GODOT.md`).
 3. Reference route for images: Gemini direct (Nano Banana 2.1, default), OpenAI direct (GPT Image 2.5), NanoGPT, or PixelLab (pixel-art games; budget in generations). Daily generation budget in USD or generations.
 4. Language of in-game content and docs (default English).
 
@@ -38,7 +38,7 @@ Do NOT ask the human to pick an art style here and do NOT infer one from the gen
 Copy everything under `${CLAUDE_PLUGIN_ROOT}/templates/project/` into the current folder, keeping the folder structure. Use the Read and Write tools (works the same on Windows and Linux). Write `gitignore.template` as `.gitignore`. Copy `tools/pixellab/` only when the game is pixel art and uses PixelLab as its art route (pixel art only); otherwise leave it out. Create the empty folders `art/refs/`, `audio/sfx/`, `audio/music/`, `public/assets/` and `build/`. Then:
 
 - Fill in the placeholders in angle brackets in `CLAUDE.md`, `docs/concept.md`, `docs/specs/000-stack.md` and `docs/specs/art-direction.md` from the answers. Leave the style paragraph in `art-direction.md` empty until the exploration round.
-- Record the chosen stack row, pinned versions (Node, Python, Blender as found), reference route and budget in `000-stack.md`, each with a dated entry under Decisions.
+- Record the chosen stack row, engine, pinned versions (Node, Python, Blender as found; Godot when chosen), reference route and budget in `000-stack.md`, each with a dated entry under Decisions.
 
 ## 4. Set up the code project
 

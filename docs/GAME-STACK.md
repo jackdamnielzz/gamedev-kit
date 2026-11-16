@@ -14,13 +14,19 @@ How the AI should use it:
 - Once a choice is recorded in a spec, do not re-argue it in later sessions unless the human asks.
 - The human designs and playtests; agents build. When a choice is genuinely ambiguous, ask the human instead of guessing.
 
-How the human should use it: enable the `gamedev-kit` Claude Code plugin **per game folder** (project scope, so other software projects never load it; `scripts/new-game.ps1` in the kit repo does this for a new game) (it carries this document, `AI-ASSET-WORKFLOW.md`, `NANOGPT-API.md` and the indie development guide as on-demand knowledge, plus `/gamedev-kit:new-game` to scaffold a project, `/gamedev-kit:new-asset` to run the reference-first pipeline, `/gamedev-kit:game-concept`, `/gamedev-kit:stack-advisor` and `/gamedev-kit:sync-docs`). Install steps are in the plugin's `README.md`. Without the plugin, copy this document into a new repository as `docs/GAME-STACK.md` and reference it from `CLAUDE.md`. Install Blender once on the machine (and pin the version per game); Claude drives it through Python.
+How the human should use it: enable the `gamedev-kit` Claude Code plugin **per game folder** (project scope, so other software projects never load it; `scripts/new-game.ps1` in the kit repo does this for a new game) (it carries this document and the companion documents below as on-demand knowledge, plus `/gamedev-kit:briefing` to read the kit before a task, `/gamedev-kit:new-game` to scaffold a project, `/gamedev-kit:new-asset` to run the reference-first pipeline, `/gamedev-kit:game-concept`, `/gamedev-kit:stack-advisor` and `/gamedev-kit:sync-docs`). Install steps are in the plugin's `README.md`. Without the plugin, copy this document into a new repository as `docs/GAME-STACK.md` and reference it from `CLAUDE.md`. Install Blender once on the machine (and pin the version per game); Claude drives it through Python.
 
 Companion documents:
 
 - `AI-ASSET-WORKFLOW.md` — the reference-first pipeline in detail, which AI generator to use for each asset type (images, pixel art, 3D, SFX, music, voice), prices, licences, post-processing and Steam AI disclosure.
+- `START-HERE.md` — the standing brief every session reads first: reading order, the non-negotiable rules, where things are.
 - `NANOGPT-API.md` — full API reference for NanoGPT, one of the gateways for AI asset generation.
+- `PIXELLAB-API.md` — full API reference for PixelLab, the pixel-art generator.
+- `TRIPO.md` — Tripo guide: API v3, image-to-3D settings, rigging, animation and the Blender pipeline to 8-direction sprites.
+- `ASSET-FORGE.md` — Asset Forge, our own AI-driven 3D and pixel-art asset workshop.
+- `GODOT.md` — the Godot 4 recipe, the alternative to the web stack in this document.
 - `indie-game-development-guide.md` — lifecycle, design craft, market, marketing and release.
+- `STORY-AND-NARRATIVE.md` — story without text overload: principles, storylet engine, pacing, text UX.
 
 ## Core principles
 
@@ -364,7 +370,7 @@ Every subagent brief contains: the goal in one sentence, the spec section it imp
 - `CLAUDE.md`: loaded automatically; holds the rules (template in the last section).
 - Subagents in `.claude/agents/*.md` with their own tools and instructions.
 - Hooks in `.claude/settings.json`: run typecheck and tests after edits; block edits to protected paths.
-- Skills from the `gamedev-kit` plugin: `/gamedev-kit:new-game`, `/gamedev-kit:game-concept`, `/gamedev-kit:stack-advisor`, `/gamedev-kit:new-asset`. Project-specific skills go in `.claude/skills/`.
+- Skills from the `gamedev-kit` plugin: `/gamedev-kit:briefing`, `/gamedev-kit:new-game`, `/gamedev-kit:game-concept`, `/gamedev-kit:stack-advisor`, `/gamedev-kit:new-asset`, `/gamedev-kit:sync-docs`, plus the knowledge skills listed in the plugin's `README.md`. Project-specific skills go in `.claude/skills/`.
 - MCP servers at user scope: NanoGPT (asset generation), optionally PixelLab or Retro Diffusion (pixel art), Playwright (drive and screenshot the running game), and a sandboxed Blender MCP for interactive exploration. Headless recipe scripts stay the source of truth.
 
 ### Logging what was learned
@@ -457,7 +463,14 @@ Copy these into a new repository and fill in the placeholders in angle brackets.
 ```markdown
 # <Game name> — rules for agents
 
+## Before you start (every session)
+Read the gamedev-kit brief `docs/START-HERE.md` from the plugin first; the kit's SessionStart hook gives the path, or run `/gamedev-kit:briefing`. Before a new asset group, a new major system or a stack change, re-read the full kit documents it lists. Everything in this project is in English: replies, code, docs, in-game text and all prompts for AI tools.
+
 Stack and principles: GAME-STACK.md (gamedev-kit knowledge). Chosen stack: docs/specs/000-stack.md. Concept: docs/concept.md.
+
+This project uses the `gamedev-kit` Claude Code plugin. Its skills hold the shared knowledge: `gamedev-kit:game-stack`, `gamedev-kit:asset-workflow`, `gamedev-kit:nanogpt-api`, `gamedev-kit:pixellab-api`, `gamedev-kit:tripo-api`, `gamedev-kit:asset-forge`, `gamedev-kit:godot`, `gamedev-kit:indie-guide`, `gamedev-kit:story-design`, and the workflows `/gamedev-kit:briefing`, `/gamedev-kit:new-asset`, `/gamedev-kit:game-concept`, `/gamedev-kit:stack-advisor`, `/gamedev-kit:sync-docs`. Load the matching skill before planning, building assets or answering design questions. Where this file or docs/specs/ disagree with the kit, this project wins.
+
+For every task, tell the human which Claude model you recommend (Opus: coordination, specs, art direction; Sonnet: most building; Haiku: mechanical edits).
 
 ## Roles
 - The human designs, picks references and playtests. Agents build. Ask the human when a design choice is not in a spec.
@@ -470,7 +483,7 @@ Stack and principles: GAME-STACK.md (gamedev-kit knowledge). Chosen stack: docs/
 - All art and audio come from scripts in art/, audio/ and tools/. Never hand-edit files in public/assets/.
 
 ## Art: reference first (default for every asset group)
-- Before building any final visual asset, generate options with <Nano Banana 2.1 | GPT Image 2.5> via tools/gen_image.py (provider: <gemini | openai | nanogpt>), show the human a contact sheet, and wait for a pick.
+- Before building any final visual asset, generate options with <Nano Banana 2.1 | GPT Image 2.5> via tools/gen_image.py (provider: <gemini | openai | nanogpt | pixellab>), show the human a contact sheet, and wait for a pick.
 - Then generate reference sheets (orthographic turnarounds, UI mockups) from the pick; approved ones go to art/refs/<group>/.
 - Build assets to match the references: Blender recipes in art/blender/ (Route A), image-to-3D + Blender (Route B), or HTML/SVG/Pillow for UI (Route C).
 - Run `npm run assets:compare -- <asset>` and read the comparison before reporting done. Max 3-5 rounds, then ask the human.
@@ -480,7 +493,7 @@ Stack and principles: GAME-STACK.md (gamedev-kit knowledge). Chosen stack: docs/
 - Follow AI-ASSET-WORKFLOW.md for which generator to use per asset type.
 - Every AI image (reference or shipped) has a recipe in art/recipes/ and an entry in assets/manifest.json (provider, model, date, cost, licence); shipped assets list the references they were built from.
 - Read the contact sheet, comparison or spectrogram before reporting an asset done. The human approves hero assets.
-- Never print or commit API keys (GEMINI_API_KEY, OPENAI_API_KEY, NANOGPT_API_KEY). Ask before any generation run estimated above $<budget>.
+- Never print or commit API keys (GEMINI_API_KEY, OPENAI_API_KEY, NANOGPT_API_KEY, PIXELLAB_API_KEY, TRIPO_API_KEY). Ask before any generation run estimated above $<budget>.
 
 ## Working rules
 - Touch only the files your task brief assigns to you.
