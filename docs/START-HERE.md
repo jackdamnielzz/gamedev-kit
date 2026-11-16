@@ -11,16 +11,21 @@ This is the standing brief for any agent working in a game folder where the game
 3. `AI-ASSET-WORKFLOW.md`: the reference-first art pipeline, the animation decision guide, generators, cleanup, licences and Steam disclosure
 4. `indie-game-development-guide.md`: lifecycle, scope, design, production, marketing
 5. `STORY-AND-NARRATIVE.md`: story without text overload, storylet systems, pacing, text UX
-6. `NANOGPT-API.md`: only the overview now; read the rest before the first generation call
+6. `GAME-FEEL.md`: response, feedback and forgiveness, starting values, how feel is tested and tuned
+7. `NANOGPT-API.md`: only the overview now; read the rest before the first generation call
+
+`PLAYTEST-AND-BUGS.md` is read before the first playtest or the first bug fix; the templates already contain its command log, bug report and replay tests.
 
 Then reply to the human with a short brief, at most 10 lines: the rules you will follow, the questions you still need answered, and your recommended Claude model for the next step. Only then start.
 
 **An existing game (the folder has `docs/specs/000-stack.md`).**
 
-- Read the project's `CLAUDE.md`, `docs/concept.md` and every file in `docs/specs/` first. The project's decisions win over the kit.
+- Read the project's `docs/STATUS.md` first (where the project stands, what is next, what waits for the human), then `CLAUDE.md`, `docs/concept.md` and every file in `docs/specs/`. The project's decisions win over the kit.
 - Before each task, read the kit sections that apply to it:
   - art and animation: `AI-ASSET-WORKFLOW.md`;
-  - architecture, testing and tooling: `GAME-STACK.md`;
+  - architecture, testing and tooling: `GAME-STACK.md` (Godot: `GODOT.md`);
+  - controls, combat, camera, juice and UI motion: `GAME-FEEL.md`;
+  - playtests and bugs: `PLAYTEST-AND-BUGS.md`;
   - scope, release and marketing: the indie guide;
   - story, dialogue, events and narrative systems: `STORY-AND-NARRATIVE.md`.
 - Re-read the full documents before a new asset group, a new major system, or a stack change.
@@ -48,6 +53,9 @@ Do not skim from memory. The documents change. The repo `jackdamnielzz/gamedev-k
 10. **Settings.** Game ideas and settings are not based on the Netherlands. Avoid real franchises' names and trademarks; describe looks in your own words, never "in the style of" a living artist or "like <existing game unit>".
 11. **Never print or commit API keys.**
 12. **Story lives in the verbs.** Tell the story through mechanics, the world and short reactive lines, not walls of text. Every line is short, never repeats and refers to something the player did; everything is skippable. Details and the checklist are in `STORY-AND-NARRATIVE.md`.
+13. **Feel is data, tested by the agent and tuned by the human.** Every feel value lives in `data/feel.json`; timing that changes outcomes is in the sim, in ticks. Prove timing with tick tests, check effects with a filmstrip, and let the human tune in the dev panel. The core verb must feel good with greybox art before the vertical slice (`GAME-FEEL.md`).
+14. **Every bug gets a test.** A sim bug becomes a replay file (from the in-game F8 report: seed + command log) that fails before the fix and passes after it; other bugs get an end-to-end test. Playtest notes are triaged; the human decides changes to rules, economy, scope and story (`PLAYTEST-AND-BUGS.md`).
+15. **Leave the project in a known state.** Read `docs/STATUS.md` at the start of a session and end with `/gamedev-kit:handoff`: checks run, status updated and committed, open questions listed for the human.
 
 ## 3. Where things are
 
@@ -58,6 +66,10 @@ Do not skim from memory. The documents change. The repo `jackdamnielzz/gamedev-k
 | One-page concept | `/gamedev-kit:game-concept [idea]` |
 | Stack choice | `/gamedev-kit:stack-advisor [question]` |
 | Story, dialogue and event systems | `STORY-AND-NARRATIVE.md` (skill `gamedev-kit:story-design`) |
+| Controls, hit feedback, camera, juice, UI motion | `GAME-FEEL.md` (skill `gamedev-kit:game-feel`) |
+| Plan a playtest, write up notes, triage, fix a bug | `/gamedev-kit:playtest [plan \| notes \| triage \| bug]`, `PLAYTEST-AND-BUGS.md` |
+| End a session, update the project status | `/gamedev-kit:handoff`, `docs/STATUS.md` |
+| Reviews by a separate agent | `.claude/agents/` in the project: `reviewer`, `art-director`, `perf-auditor` |
 | Put a lesson back into the kit | `/gamedev-kit:sync-docs [change]` |
 | Image, video and audio API calls | `NANOGPT-API.md`, `tools/gen_image.py` |
 | Pixel-art generation (PixelLab) | `PIXELLAB-API.md`, `tools/gen_image.py --provider pixellab` |

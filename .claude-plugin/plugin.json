@@ -1,6 +1,6 @@
 {
   "name": "gamedev-kit",
-  "description": "Niels's Claude-driven game dev kit: stack catalogue, reference-first AI art pipeline (Nano Banana / GPT Image references -> Blender and code), NanoGPT reference, indie guide, and project scaffolding.",
+  "description": "Niels's Claude-driven game dev kit: stack catalogue (TypeScript web stack and Godot), reference-first AI art pipeline (Nano Banana / GPT Image references -> Blender and code), API references (NanoGPT, PixelLab, Tripo), game feel, story, playtest and bug loop, indie guide, and project templates with guard rails.",
   "author": {
     "name": "Niels",
     "url": "https://github.com/jackdamnielzz"
@@ -8,5 +8,17 @@
   "homepage": "https://github.com/jackdamnielzz/gamedev-kit",
   "repository": "https://github.com/jackdamnielzz/gamedev-kit",
   "license": "UNLICENSED",
-  "keywords": ["gamedev", "blender", "phaser", "three.js", "ai-assets", "nano-banana", "nanogpt", "tripo"]
+  "keywords": [
+    "gamedev",
+    "blender",
+    "phaser",
+    "three.js",
+    "ai-assets",
+    "nano-banana",
+    "nanogpt",
+    "tripo",
+    "godot",
+    "game-feel",
+    "playtesting"
+  ]
 }

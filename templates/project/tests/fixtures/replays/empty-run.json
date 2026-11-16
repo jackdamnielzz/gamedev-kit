@@ -1,0 +1,13 @@
+{
+  "format": 1,
+  "id": "empty-run",
+  "game_version": "0.1.0",
+  "commit": "template",
+  "seed": 1,
+  "config": {},
+  "start_save": null,
+  "ticks": 600,
+  "commands": [],
+  "expect": { "invariants": [], "state_hash": null },
+  "note": "No input for 600 ticks; keeps the determinism tests running before the first real replay"
+}

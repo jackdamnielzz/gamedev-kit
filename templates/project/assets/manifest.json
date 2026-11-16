@@ -1,4 +1,4 @@
 {
-  "_schema": "One entry per approved reference and per shipped file. kind: reference | shipped. Keys: path, kind, provider, model, recipe, prompt_hash, date, cost_usd, licence, built_from (shipped only: reference paths), build_script_hash, ai_pixels_shipped (true if AI pixels are in the shipped file), human_edited.",
+  "_schema": "One entry per approved reference and per shipped file; checked by tools/check_assets.py (npm run assets:check). kind: reference | shipped. Keys: path (a file, or a glob such as public/assets/units/tank_*.png), kind, provider (gemini, openai, nanogpt, pixellab, tripo, elevenlabs, suno, asset-forge, blender, code ...), model, recipe (path of the AI recipe or build script), prompt_hash, date, cost_usd, licence (required), built_from (shipped only: reference paths), build_script_hash (shipped only: python tools/check_assets.py --hash <recipe>; the check fails when the recipe changes and the asset is not rebuilt), ai_pixels_shipped (shipped only, required: true if AI pixels or AI audio are in the shipped file), human_edited.",
   "entries": []
 }

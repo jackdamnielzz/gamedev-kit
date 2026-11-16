@@ -13,7 +13,7 @@ Recommended model: Opus for this whole skill (decisions here are expensive to un
 
 ## 0. Read the kit first
 
-Before anything else, read `${CLAUDE_PLUGIN_ROOT}/docs/START-HERE.md` and then, in full and in this order: `GAME-STACK.md`, `AI-ASSET-WORKFLOW.md`, `indie-game-development-guide.md` and `STORY-AND-NARRATIVE.md`, plus the overview of `NANOGPT-API.md` (all in `${CLAUDE_PLUGIN_ROOT}/docs/`). Skip a document only if you already read it in full earlier in this session. Give the human the short brief that START-HERE asks for, then continue.
+Before anything else, read `${CLAUDE_PLUGIN_ROOT}/docs/START-HERE.md` and then, in full and in this order: `GAME-STACK.md`, `AI-ASSET-WORKFLOW.md`, `indie-game-development-guide.md`, `STORY-AND-NARRATIVE.md` and `GAME-FEEL.md`, plus the overview of `NANOGPT-API.md` (all in `${CLAUDE_PLUGIN_ROOT}/docs/`). Skip a document only if you already read it in full earlier in this session. Give the human the short brief that START-HERE asks for, then continue.
 
 ## 1. Check the folder
 
@@ -35,18 +35,27 @@ Do NOT ask the human to pick an art style here and do NOT infer one from the gen
 
 ## 3. Copy the templates
 
-Copy everything under `${CLAUDE_PLUGIN_ROOT}/templates/project/` into the current folder, keeping the folder structure. Use the Read and Write tools (works the same on Windows and Linux). Write `gitignore.template` as `.gitignore`. Copy `tools/pixellab/` only when the game is pixel art and uses PixelLab as its art route (pixel art only); otherwise leave it out. Create the empty folders `art/refs/`, `audio/sfx/`, `audio/music/`, `public/assets/` and `build/`. Then:
+Copy in two layers, keeping the folder structure and including dot-folders (`.claude/`, `.github/`, `.nvmrc`). Use the Read and Write tools (works the same on Windows and Linux):
 
-- Fill in the placeholders in angle brackets in `CLAUDE.md`, `docs/concept.md`, `docs/specs/000-stack.md` and `docs/specs/art-direction.md` from the answers. Leave the style paragraph in `art-direction.md` empty until the exploration round.
+1. Everything under `${CLAUDE_PLUGIN_ROOT}/templates/project/` (shared by every game: docs, specs, STATUS, playtest template, art and audio scripts, `tools/`, reviewer agents, hooks, replay fixtures).
+2. Then the engine layer on top, overwriting files with the same name: `${CLAUDE_PLUGIN_ROOT}/templates/web/` for the TypeScript web stack, or `${CLAUDE_PLUGIN_ROOT}/templates/godot/` for Godot (it brings its own `CLAUDE.md`).
+
+Then:
+
+- Write `gitignore.template` as `.gitignore`. Copy `tools/pixellab/` only when the game is pixel art and uses PixelLab as its art route; otherwise leave it out. Create the empty folders `art/refs/`, `audio/sfx/`, `audio/music/`, `public/assets/` (Godot: `assets/`) and `build/`.
+- Merge the `hooks` block of `.claude/hooks.template.json` into `.claude/settings.json`, keeping `enabledPlugins` and anything else already there; then delete `hooks.template.json`.
+- Fill in the placeholders in angle brackets in `CLAUDE.md`, `docs/concept.md`, `docs/STATUS.md`, `docs/specs/000-stack.md`, `docs/specs/art-direction.md` and, per engine, `package.json` and `index.html` (web) or `project.godot` (Godot) from the answers. Leave the style paragraph in `art-direction.md` empty until the exploration round.
 - Record the chosen stack row, engine, pinned versions (Node, Python, Blender as found; Godot when chosen), reference route and budget in `000-stack.md`, each with a dated entry under Decisions.
 
 ## 4. Set up the code project
 
-If the human chose **Godot**, follow `${CLAUDE_PLUGIN_ROOT}/docs/GODOT.md` instead of the web steps below (project settings, folder layout, headless import, tests, a first screenshot), and skip the npm parts.
+The engine layer is already a running skeleton: a placeholder deterministic sim with the kit's contract, a fixed-timestep loop, the command log, the F8 bug report, determinism, replay and (web) property and data tests, lint rules for the sim, CI and the perf guard. Do not rebuild these; build the game on top of them.
 
-Following GAME-STACK.md for the chosen recipe: `git init`, `npm create vite@latest . -- --template vanilla-ts` (or set up by hand if the folder is not empty), install the chosen renderer (Phaser / PixiJS / Three.js), zod, Vitest, fast-check, Playwright, ESLint + Prettier. Create the `src/sim`, `src/game`, `src/render`, `src/ui`, `src/audio`, `src/data` layers with a minimal deterministic sim, a passing unit test and a determinism test. Add the npm scripts from the "npm scripts" table that apply now (`dev`, `build`, `check`, `validate`, `refs:prepare`, `assets:compare`); leave the rest for later specs. Install the Python requirements from `requirements.txt` in a venv (`.venv`).
+**Web:** `git init` if needed, `npm install`, then install the chosen renderer (Phaser / PixiJS / Three.js) and replace the canvas placeholder in `src/main.ts` with `src/render` and `src/ui` layers. Keep `typescript` on the pinned 6.0.x line until typescript-eslint supports a newer major. Run `npx playwright install chromium` once. Install the Python requirements from `requirements.txt` in a venv (`.venv`). Run `npm run check`, `npm run assets:check` and `npm run test:e2e`, and paste the results.
 
-Run `npm run check` and paste the result.
+**Godot:** follow `${CLAUDE_PLUGIN_ROOT}/docs/GODOT.md`: set the pinned Godot version in `project.godot` features, `000-stack.md`, `CLAUDE.md` and `.github/workflows/ci.yml`, then run `<godot> --headless --path . --import` and `<godot> --headless --path . --script res://tests/run_tests.gd`, and take a first screenshot from a normal run. Paste the results. The Godot layer has not been run in CI yet: fix anything the first run reports and record the fix with `/gamedev-kit:sync-docs`.
+
+Then fill in `docs/STATUS.md`: phase "prototype", what runs, next steps (the first spec, the feel gate, the first asset group).
 
 ## 5. Plan the first art exploration
 
@@ -54,4 +63,4 @@ Do not generate images in this skill. End by proposing the first asset groups (f
 
 ## 6. Finish
 
-Commit with message "Scaffold <title> with gamedev-kit". Summarise in a few lines what was set up, what is missing (tools, keys) and the next step. Tell the human that kit updates do not change this project's `CLAUDE.md`; the decisions in `docs/specs/` stay frozen on purpose.
+Commit with message "Scaffold <title> with gamedev-kit" (including `docs/STATUS.md`). Summarise in a few lines what was set up, what is missing (tools, keys) and the next step. Tell the human that kit updates do not change this project's `CLAUDE.md`; the decisions in `docs/specs/` stay frozen on purpose.

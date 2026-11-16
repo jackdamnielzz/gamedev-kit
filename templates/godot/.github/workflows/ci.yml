@@ -1,0 +1,48 @@
+# CI for a Godot game (GODOT.md, section 7): pinned Godot, headless import, tests, a smoke run of
+# the main scene, and the asset manifest check. No paid AI calls, no API keys.
+# Bump the action versions when GitHub warns about them.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  GODOT_VERSION: "4.6.2" # keep equal to docs/specs/000-stack.md
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          lfs: true
+      - uses: actions/cache@v4
+        with:
+          path: ~/godot
+          key: godot-${{ env.GODOT_VERSION }}
+      - name: Download Godot
+        run: |
+          if [ ! -x ~/godot/godot ]; then
+            mkdir -p ~/godot && cd ~/godot
+            curl -sSL -o godot.zip "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+            unzip -q godot.zip && mv "Godot_v${GODOT_VERSION}-stable_linux.x86_64" godot && rm godot.zip
+          fi
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Import
+        run: ~/godot/godot --headless --path . --import
+      - name: Tests
+        run: ~/godot/godot --headless --path . --script res://tests/run_tests.gd
+      - name: Smoke run of the main scene
+        run: |
+          ~/godot/godot --headless --path . --quit-after 120 2>&1 | tee smoke.log
+          if grep -E "SCRIPT ERROR|^ERROR" smoke.log; then exit 1; fi
+      - name: Asset manifest
+        run: python tools/check_assets.py

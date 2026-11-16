@@ -84,7 +84,8 @@ project/
 - **Deterministic sim:** a `RandomNumberGenerator` with a fixed `seed` stored in the world state; no `randi()`/`randf()` globals, no `Time` in the sim; fixed steps or turns. Same seed + same command log = same result, checked by a determinism test.
 - **Content as data:** JSON in `data/` validated at load (a small schema checker script) or typed Resources; balance changes are data edits.
 - **Saves:** versioned JSON in `user://`, with migrations and fixture saves, as in `GAME-STACK.md`.
-- **Tests:** a test framework for GDScript (for example GUT or gdUnit4; pick one, pin its version) run headless in CI; bots play through the same command API as the player.
+- **Tests:** the template's framework-free runner (`tests/run_tests.gd`: every `test_*()` method in `tests/test_*.gd`, exit code 1 on failure) or a framework such as GUT or gdUnit4 (pick one, pin its version), run headless in CI; bots play through the same command API as the player.
+- **Replays and purity:** the template's `tests/test_determinism.gd` runs every replay in `tests/fixtures/replays/` (the same format as the web stack, `PLAYTEST-AND-BUGS.md`) twice, with a save/load halfway and with its invariants; `tests/test_sim_purity.gd` fails when `sim/` uses global randomness, the clock or nodes, the counterpart of the web stack's lint rules.
 - **Typed GDScript** (`var x: int`, typed arrays, `class_name`) as the agent guard rail, with warnings treated as errors in project settings.
 
 ## 6. Assets into Godot
@@ -100,6 +101,8 @@ project/
 Only approved assets go into `assets/`; every file has a manifest entry.
 
 ## 7. CI and release
+
+The Godot template (`templates/godot/`, copied on top of `templates/project/` by `/gamedev-kit:new-game`) holds a running skeleton: `project.godot` with the settings above, a placeholder `sim/world.gd` with the kit's sim contract, `game/main.gd` with the fixed-step loop, command log and F8 bug report (`user://bugreports/`), the tests above and `.github/workflows/ci.yml`. **It was written against the Godot 4.6 documentation but has not been run in a real Godot yet**: the first game that uses it fixes what its first run reports and feeds the fixes back with `/gamedev-kit:sync-docs`.
 
 - GitHub Actions: download the pinned Godot (and export templates) in the workflow, cache them, run the headless import, the tests and the bots, then export.
 - Desktop: export presets for Windows, Linux (Steam Deck) and macOS. Steam features through a Steamworks extension for Godot (for example GodotSteam); verify its version against the pinned Godot.

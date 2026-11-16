@@ -150,7 +150,7 @@ Prototyping answers "is it fun?" as cheaply as possible; the vertical slice answ
 
 ### 6.2 Playtesting the prototype
 
-Watch people play without explaining anything. Note where they get confused, bored or excited. Ask open questions afterwards ("What was the goal?", "When did you want to stop?") instead of "Did you like it?". Friends are polite; strangers on Discord, itch.io or at local meetups give more honest signal. Key signal: do testers ask to play again?
+Watch people play without explaining anything. Note where they get confused, bored or excited. Ask open questions afterwards ("What was the goal?", "When did you want to stop?") instead of "Did you like it?". Friends are polite; strangers on Discord, itch.io or at local meetups give more honest signal. Key signal: do testers ask to play again? The kit's protocol, session template and triage are in `PLAYTEST-AND-BUGS.md`.
 
 ### 6.3 The vertical slice
 
@@ -367,7 +367,7 @@ The MDA framework (Hunicke, LeBlanc, Zubek) is a useful lens: designers write **
 
 | Area | What to get right |
 | --- | --- |
-| Game feel | Responsive controls, coyote time and input buffering in platformers, camera smoothing, feedback on every action |
+| Game feel | Responsive controls, coyote time and input buffering in platformers, camera smoothing, feedback on every action; starting values and the tuning loop are in `GAME-FEEL.md` |
 | Difficulty and flow | Challenge that rises with skill (flow channel); difficulty options; teach, test, then twist each mechanic |
 | Onboarding | Teach through play, not text; introduce one idea at a time; the first 5–15 minutes decide Steam refunds (2 hours / 14 days rule) |
 | Level design | Greybox first; guide with light, landmarks and composition; pacing of tension and release; optional secrets |

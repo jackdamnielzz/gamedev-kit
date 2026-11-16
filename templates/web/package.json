@@ -1,0 +1,36 @@
+{
+  "name": "<game-slug>",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "validate": "vitest run tests/unit/data.test.ts",
+    "test": "vitest run",
+    "check": "npm run typecheck && npm run lint && npm run test",
+    "test:e2e": "playwright test --grep-invert @perf",
+    "perf": "playwright test --grep @perf",
+    "assets:check": "python tools/check_assets.py",
+    "refs:prepare": "python art/py/slice_refs.py && python art/py/extract_palette.py",
+    "assets:compare": "python art/py/compare.py",
+    "ci": "npm run check && npm run assets:check && npm run build && npm run test:e2e && npm run perf"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.65.1",
+    "@types/node": "^24.0.0",
+    "eslint": "^10.15.0",
+    "fast-check": "^4.10.2",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.73.0",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.0"
+  },
+  "dependencies": {
+    "zod": "^4.6.7"
+  }
+}

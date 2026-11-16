@@ -1,0 +1,17 @@
+{
+  "_note": "Merged into .claude/settings.json by /gamedev-kit:new-game (keep enabledPlugins), then this file is deleted. See GAME-STACK.md, 'Agent hooks'.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [{ "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/tools/hooks/check-edit.mjs\" pre" }]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [{ "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/tools/hooks/check-edit.mjs\" post", "timeout": 120 }]
+      }
+    ]
+  }
+}

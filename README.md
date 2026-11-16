@@ -18,9 +18,13 @@ Niels's Claude Code plugin for building games with Claude Code: the stack catalo
 | `docs/ASSET-FORGE.md` | Asset Forge, our own AI-driven 3D and pixel-art asset workshop: connecting it, its command groups, where it fits in the pipeline, when not to use it |
 | `docs/indie-game-development-guide.md` | Lifecycle, design, production, marketing, release |
 | `docs/STORY-AND-NARRATIVE.md` | Story without text overload: principles, case lessons, storylet engine, pacing, anti-repetition, text UX, checklist |
+| `docs/GAME-FEEL.md` | Game feel: response, feedback and forgiveness, starting values per genre, where each value lives, how an agent tests feel and the human tunes it |
+| `docs/PLAYTEST-AND-BUGS.md` | Playtest protocol, triage, the in-game bug report (seed + command log), replay files and regression tests |
 | `skills/` | The plugin's skills (below) |
 | `hooks/` | SessionStart hook that briefs every session in a game folder (below) |
-| `templates/project/` | Files copied into every new game by `/gamedev-kit:new-game` |
+| `templates/project/` | Shared files copied into every new game by `/gamedev-kit:new-game`: docs and specs, `docs/STATUS.md`, playtest template, art and audio scripts, `tools/` (`gen_image.py`, `gen_sfx.py`, `check_assets.py`, edit hooks), reviewer agents, replay fixtures |
+| `templates/web/` | Engine layer for the TypeScript web stack, copied on top: a running skeleton with the sim contract, command log, F8 bug report, determinism, replay, property and data tests, ESLint rules for the sim, Playwright smoke and perf tests, CI and GitHub Pages workflows |
+| `templates/godot/` | Engine layer for Godot 4, copied on top: the same skeleton in GDScript, a headless test runner, a sim purity test and CI. **Not yet run against a real Godot**: the first game that uses it checks it |
 | `templates/project/tools/pixellab/` | **Pixel art only:** PixelLab scripts (character in 4/8 directions with palette snap, lint, review page and Phaser export); copied only into pixel-art games that use PixelLab. See its `README.md` and `docs/PIXELLAB-API.md` section 9.1 |
 
 Skills (Claude loads the knowledge skills by itself when the topic comes up; the workflows you can also type):
@@ -36,9 +40,12 @@ Skills (Claude loads the knowledge skills by itself when the topic comes up; the
 | `gamedev-kit:godot` | Knowledge: GODOT.md |
 | `gamedev-kit:indie-guide` | Knowledge: indie guide |
 | `gamedev-kit:story-design` | Knowledge: STORY-AND-NARRATIVE.md |
+| `gamedev-kit:game-feel` | Knowledge: GAME-FEEL.md |
 | `/gamedev-kit:briefing [task]` | Read the docs (all of them for a new game, the relevant parts for an existing one) and give a short brief |
 | `/gamedev-kit:new-game [title]` | Scaffold a new game in the current folder |
 | `/gamedev-kit:new-asset <group>` | Run the reference-first pipeline for one asset group |
+| `/gamedev-kit:playtest [plan \| notes \| triage \| bug]` | Plan a playtest, write up notes, triage findings, or turn a bug report into a replay test and a fix |
+| `/gamedev-kit:handoff` | End a session: run the checks, update and commit `docs/STATUS.md` |
 | `/gamedev-kit:game-concept [idea]` | One-page concept in `docs/concept.md` |
 | `/gamedev-kit:stack-advisor [question]` | Pick stack options, record them in `000-stack.md` |
 | `/gamedev-kit:sync-docs [change]` | Put a lesson or change into this repo (only when you call it) |
@@ -47,8 +54,8 @@ Skills (Claude loads the knowledge skills by itself when the topic comes up; the
 
 When a Claude Code session starts in a game folder where the kit is enabled, the hook `hooks/session-start.js` adds a briefing to Claude's context. You don't need to type anything:
 
-- **New game** (no `docs/specs/000-stack.md` yet): Claude must first read START-HERE, GAME-STACK, AI-ASSET-WORKFLOW, the indie guide and STORY-AND-NARRATIVE in full, give you a short brief, and only then start, even if your first message says "start building".
-- **Existing game:** Claude reads START-HERE, the project's `CLAUDE.md` and `docs/specs/`, plus the kit sections that fit the task, and re-reads everything before a new asset group or major system.
+- **New game** (no `docs/specs/000-stack.md` yet): Claude must first read START-HERE, GAME-STACK, AI-ASSET-WORKFLOW, the indie guide, STORY-AND-NARRATIVE and GAME-FEEL in full, give you a short brief, and only then start, even if your first message says "start building".
+- **Existing game:** Claude reads START-HERE, the project's `docs/STATUS.md`, `CLAUDE.md` and `docs/specs/`, plus the kit sections that fit the task, and re-reads everything before a new asset group or major system.
 - **Resumed or compacted session:** a short reminder of the rules.
 
 The hook needs Node on the computer, which the stack requires anyway. It runs only where the plugin is enabled, so your other projects are not affected. You can also trigger the briefing by hand with `/gamedev-kit:briefing`.
@@ -85,7 +92,7 @@ To remove the kit from one game: `claude plugin uninstall gamedev-kit@gamedev-ki
 
 ### Also needed on the computer
 
-Git, Node 20+, Python 3.10+, Blender (the version gets pinned per game), and one image API key as a user environment variable: `GEMINI_API_KEY`, `OPENAI_API_KEY`, `NANOGPT_API_KEY` or `PIXELLAB_API_KEY`. On Windows:
+Git, Node 20+ (22 in the web template), Python 3.10+, Blender (the version gets pinned per game), Godot 4 for Godot games, and one image API key as a user environment variable: `GEMINI_API_KEY`, `OPENAI_API_KEY`, `NANOGPT_API_KEY` or `PIXELLAB_API_KEY`. On Windows:
 
 ```
 [Environment]::SetEnvironmentVariable('GEMINI_API_KEY', '<your key>', 'User')

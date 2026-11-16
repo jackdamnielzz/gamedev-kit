@@ -27,6 +27,8 @@ Companion documents:
 - `GODOT.md` — the Godot 4 recipe, the alternative to the web stack in this document.
 - `indie-game-development-guide.md` — lifecycle, design craft, market, marketing and release.
 - `STORY-AND-NARRATIVE.md` — story without text overload: principles, storylet engine, pacing, text UX.
+- `GAME-FEEL.md` — response, feedback and forgiveness: starting values, where feel lives, how it is tested and tuned.
+- `PLAYTEST-AND-BUGS.md` — playtests, triage, the in-game bug report, replay files and regression tests.
 
 ## Core principles
 
@@ -96,6 +98,8 @@ The runtime is split into a pure simulation core and a presentation layer that o
 - All randomness through one seeded PRNG stored in the world state (e.g. mulberry32 or sfc32). Never `Math.random()`.
 - No wall-clock time in the sim; time is the tick counter.
 - Players and bots act only through the same command objects (`{type: "build", part: "engine", x: 3, y: 1}`). This guarantees bots test the real game.
+- The game layer logs every command with its tick. The log plus the seed is a replay: it powers the in-game bug report and regression tests (`PLAYTEST-AND-BUGS.md`).
+- The contract every sim keeps (the templates follow it): `createWorld(seed, config)`, `step(world, commands)` returning the next world, `serialize(world)` as stable JSON, `deserialize(text)`.
 - The sim emits events; presentation layers subscribe. The sim never calls rendering or audio.
 - Avoid relying on `Math.sin`/`Math.cos` results being bit-identical across browsers if multiplayer lockstep is ever needed; use fixed-point or lookup tables in that case.
 
@@ -242,11 +246,14 @@ Quality is enforced by automated checks, not by the human reading code. A featur
 | Data validation | zod via `npm run validate` | Content files and cross-references | CI and pre-commit |
 | Unit tests | Vitest | Sim rules, economy maths, migrations | CI |
 | Property tests | fast-check | Invariants: money never negative, no unit outside map, save → load → save is identical | CI |
-| Determinism test | Vitest | Same seed + same input log → identical state hash after N ticks | CI |
-| End-to-end | Playwright | Game boots, menus work, a scripted session reaches a milestone, no console errors | CI |
+| Determinism test | Vitest | Same seed + same input log → identical state hash after N ticks; save/load halfway changes nothing | CI |
+| Replay tests | Vitest + `tests/fixtures/replays/` | Every bug's replay keeps its invariants and its pinned state hash | CI |
+| End-to-end | Playwright | Game boots, menus work, a scripted session reaches a milestone, no console errors; an F8 bug report replays to the reported state | CI |
 | Visual snapshots | Playwright screenshots | Key screens unchanged unless intended | CI, on demand |
 | Performance guard | Playwright + custom metrics | Frame time, draw calls, memory on the production build | CI |
-| Asset manifest | `npm run assets:check` | Every file in `public/assets/` is in the manifest with a licence, and lists its references | CI |
+| Asset manifest | `npm run assets:check` (`tools/check_assets.py`) | Every file in `public/assets/` is in the manifest with a licence, and lists its references; a changed recipe without a rebuild fails | CI |
+
+The web template wires all of these up (`templates/web/`); Godot gets the determinism, replay and purity tests through `templates/godot/`. The game exposes two small test hooks: `window.__game` (`ready`, `version`, `serialize()`) and `window.__perf` (`frameMs` per frame of update and render work, optional `drawCalls`).
 
 ### Bots that play the game
 
@@ -257,12 +264,13 @@ Quality is enforced by automated checks, not by the human reading code. A featur
 ### Performance budgets
 
 - Store budgets in `perf/budgets.json`, e.g. frame time p95 ≤ 16.7 ms, draw calls ≤ 150, JS heap ≤ 300 MB, initial download ≤ 15 MB.
-- A Playwright test loads the production build, plays a heavy scripted scene, samples `performance.now()` per frame and reads draw calls from the renderer (`renderer.info` in Three.js), and fails when a budget is exceeded.
-- Small regressions add up silently; keep a history file so trends are visible, and run a measured audit every few features.
+- A Playwright test (`tests/e2e/perf.spec.ts`, `npm run perf`) loads the production build with `?perf=1` (the game loads its heaviest scene), reads the game's own frame work times from `window.__perf.frameMs` (not the vsync interval) and draw calls from `window.__perf.drawCalls` (fill it from `renderer.info` in Three.js), and fails when a budget is exceeded.
+- Small regressions add up silently; the perf test appends to `perf/history.jsonl` on local runs so trends are visible, and the `perf-auditor` agent does a measured audit every few features.
 
 ### Agent hooks
 
-- Configure Claude Code hooks so that after each file edit the type checker and relevant tests run automatically. Agents see failures immediately instead of at the end of a task.
+- Configure Claude Code hooks so that after each file edit the type checker and lint run automatically. Agents see failures immediately instead of at the end of a task.
+- The template does this with `tools/hooks/check-edit.mjs`, merged into `.claude/settings.json` by `new-game`: before an edit it blocks generated or engine-owned paths (`public/assets/`, `dist/`, `.godot/`, `*.import`); after an edit to a TypeScript file it runs `tsc --noEmit` and ESLint on that file, and after a `data/` edit it runs `npm run validate`. Problems go back to the agent.
 
 ## Repository layout and scripts
 
@@ -274,10 +282,13 @@ my-game/
 ├── docs/
 │   ├── concept.md            # pitch, pillars, core loop, scope
 │   ├── specs/                # 000-stack.md, 001-core-loop.md, art-direction.md, audio-direction.md …
+│   ├── STATUS.md             # where the project stands now; read first, updated last (/gamedev-kit:handoff)
+│   ├── playtests/            # session plans, session reports, triage
 │   └── MADE-WITH-AI.md       # running log of workflow lessons
+├── .github/workflows/        # ci.yml, deploy-pages.yml
 ├── .claude/
 │   ├── agents/               # subagent definitions (reviewer, art-director, perf-auditor)
-│   └── settings.json         # hooks and permissions
+│   └── settings.json         # enabled plugins, hooks (tools/hooks/check-edit.mjs) and permissions
 ├── src/
 │   ├── sim/                  # pure deterministic game rules
 │   ├── game/                 # loop, input → commands
@@ -285,7 +296,7 @@ my-game/
 │   ├── ui/                   # DOM HUD and menus (rebuilt from approved mockups)
 │   ├── audio/                # Web Audio wrapper, event → sound mapping
 │   └── data/                 # zod schemas and loaders
-├── data/                     # JSON content, maps, i18n
+├── data/                     # JSON content, maps, i18n, feel.json
 ├── art/
 │   ├── blender/              # bpy recipe scripts + lib/ (reference planes, rigs, compare)
 │   ├── py/                   # Pillow/numpy 2D generators, slicer, palette extractor, atlas packer
@@ -296,14 +307,17 @@ my-game/
 │   ├── sfx/                  # ZzFX/jsfxr parameter files and SFX recipes
 │   ├── music/                # music-as-data briefs + synth scripts
 │   └── external/             # Suno / licensed / generated tracks + LICENSES.md
-├── tools/                    # gen_image.py (gemini|openai|nanogpt), gen_sfx.py, post-processing
+├── tools/                    # gen_image.py (gemini|openai|nanogpt|pixellab), gen_sfx.py, check_assets.py, hooks/, post-processing
 ├── assets/manifest.json      # every shipped asset and reference: hashes, provider, model, cost, licence
 ├── bots/                     # pilot and saboteur bots
 ├── tests/
 │   ├── unit/
-│   ├── e2e/                  # Playwright
-│   └── fixtures/saves/       # one save per past version
-├── perf/budgets.json
+│   ├── e2e/                  # Playwright: smoke, bug report replay, perf
+│   ├── helpers/              # sim-harness.ts (runs replays), invariants.ts
+│   └── fixtures/
+│       ├── replays/          # one replay per bug (+ archive/)
+│       └── saves/            # one save per past version
+├── perf/                     # budgets.json, history.jsonl
 ├── public/assets/            # outputs the game loads
 └── build/                    # gen/ variants, previews/ (contact sheets, comparisons), reports (git-ignored)
 ```
@@ -321,9 +335,9 @@ my-game/
 | `npm run assets:check` | Fails if any recipe hash differs from the manifest or a shipped file lacks a manifest entry |
 | `npm run validate` | Validates all JSON content against schemas |
 | `npm run check` | Typecheck + lint + validate + unit tests (fast, run constantly) |
-| `npm run test:e2e` | Playwright end-to-end tests |
+| `npm run test:e2e` | Playwright end-to-end tests (everything except `@perf`) |
 | `npm run bots` | Pilot + saboteur on the CI seed set; writes reports |
-| `npm run perf` | Performance guard against `perf/budgets.json` |
+| `npm run perf` | Performance guard against `perf/budgets.json` (tests tagged `@perf`) |
 | `npm run ci` | Everything CI runs, in CI order |
 
 - Python tools are managed with a pinned `requirements.txt` (or `uv`) in `art/`, `audio/` and `tools/`; the npm scripts call them so there is one entry point.
@@ -372,6 +386,11 @@ Every subagent brief contains: the goal in one sentence, the spec section it imp
 - Hooks in `.claude/settings.json`: run typecheck and tests after edits; block edits to protected paths.
 - Skills from the `gamedev-kit` plugin: `/gamedev-kit:briefing`, `/gamedev-kit:new-game`, `/gamedev-kit:game-concept`, `/gamedev-kit:stack-advisor`, `/gamedev-kit:new-asset`, `/gamedev-kit:sync-docs`, plus the knowledge skills listed in the plugin's `README.md`. Project-specific skills go in `.claude/skills/`.
 - MCP servers at user scope: NanoGPT (asset generation), optionally PixelLab or Retro Diffusion (pixel art), Playwright (drive and screenshot the running game), and a sandboxed Blender MCP for interactive exploration. Headless recipe scripts stay the source of truth.
+
+### Project status and handoff
+
+- `docs/STATUS.md` holds where the project stands now: phase and milestone, what works, what is in progress (with branches), next steps, what waits for the human, known issues, and the last three sessions. Git keeps the history; the file stays short.
+- Every session reads it first and ends with `/gamedev-kit:handoff`: run the checks, update the file, commit it, and tell the human what waits for them. A fresh agent can then start without guessing.
 
 ### Logging what was learned
 
@@ -453,10 +472,13 @@ These problems recur in agent-built games; each has a rule that prevents it.
 | Economy exploits found by players | Saboteur bot; every exploit becomes a regression test |
 | Audio blocked or silent on first load | Resume the `AudioContext` on the first user input |
 | Agent claims a task is done without running checks | Hooks run checks automatically; brief requires pasting check results |
+| A new session does not know where the project stands | `docs/STATUS.md`, read first and updated last with `/gamedev-kit:handoff` |
+| A playtester's bug cannot be reproduced | In-game bug report with seed and command log; the replay becomes a test that fails before the fix |
+| Controls feel off but nobody can say why | Feel values as data, tick tests, filmstrips, the human's tuning panel and the feel gate (`GAME-FEEL.md`) |
 
 ## Templates
 
-Copy these into a new repository and fill in the placeholders in angle brackets. The `gamedev-kit` plugin's `new-game` skill does this automatically.
+Copy these into a new repository and fill in the placeholders in angle brackets. The `gamedev-kit` plugin's `new-game` skill does this automatically, from the real files in the plugin's `templates/` folder (`project/` shared, plus `web/` or `godot/`); the copies below are for reading and for use without the plugin. The CLAUDE.md below matches `templates/project/CLAUDE.md`.
 
 ### CLAUDE.md
 
@@ -464,11 +486,13 @@ Copy these into a new repository and fill in the placeholders in angle brackets.
 # <Game name> — rules for agents
 
 ## Before you start (every session)
-Read the gamedev-kit brief `docs/START-HERE.md` from the plugin first; the kit's SessionStart hook gives the path, or run `/gamedev-kit:briefing`. Before a new asset group, a new major system or a stack change, re-read the full kit documents it lists. Everything in this project is in English: replies, code, docs, in-game text and all prompts for AI tools.
+Read the gamedev-kit brief `docs/START-HERE.md` from the plugin first; the kit's SessionStart hook gives the path, or run `/gamedev-kit:briefing`. Then read `docs/STATUS.md`: where the project stands and what is next. Before a new asset group, a new major system or a stack change, re-read the full kit documents it lists. Everything in this project is in English: replies, code, docs, in-game text and all prompts for AI tools.
+
+End every session with `/gamedev-kit:handoff`: checks run, `docs/STATUS.md` updated and committed.
 
 Stack and principles: GAME-STACK.md (gamedev-kit knowledge). Chosen stack: docs/specs/000-stack.md. Concept: docs/concept.md.
 
-This project uses the `gamedev-kit` Claude Code plugin. Its skills hold the shared knowledge: `gamedev-kit:game-stack`, `gamedev-kit:asset-workflow`, `gamedev-kit:nanogpt-api`, `gamedev-kit:pixellab-api`, `gamedev-kit:tripo-api`, `gamedev-kit:asset-forge`, `gamedev-kit:godot`, `gamedev-kit:indie-guide`, `gamedev-kit:story-design`, and the workflows `/gamedev-kit:briefing`, `/gamedev-kit:new-asset`, `/gamedev-kit:game-concept`, `/gamedev-kit:stack-advisor`, `/gamedev-kit:sync-docs`. Load the matching skill before planning, building assets or answering design questions. Where this file or docs/specs/ disagree with the kit, this project wins.
+This project uses the `gamedev-kit` Claude Code plugin. Its skills hold the shared knowledge: `gamedev-kit:game-stack`, `gamedev-kit:asset-workflow`, `gamedev-kit:nanogpt-api`, `gamedev-kit:pixellab-api`, `gamedev-kit:tripo-api`, `gamedev-kit:asset-forge`, `gamedev-kit:godot`, `gamedev-kit:indie-guide`, `gamedev-kit:story-design`, `gamedev-kit:game-feel`, and the workflows `/gamedev-kit:briefing`, `/gamedev-kit:new-asset`, `/gamedev-kit:playtest`, `/gamedev-kit:handoff`, `/gamedev-kit:game-concept`, `/gamedev-kit:stack-advisor`, `/gamedev-kit:sync-docs`. Load the matching skill before planning, building assets or answering design questions. Where this file or docs/specs/ disagree with the kit, this project wins.
 
 For every task, tell the human which Claude model you recommend (Opus: coordination, specs, art direction; Sonnet: most building; Haiku: mechanical edits).
 
@@ -481,6 +505,15 @@ For every task, tell the human which Claude model you recommend (Opus: coordinat
 - Players and bots act only through sim commands.
 - All content is JSON in data/, validated by schemas in src/data/schemas.ts.
 - All art and audio come from scripts in art/, audio/ and tools/. Never hand-edit files in public/assets/.
+- The sim contract stays: createWorld(seed, config), step(world, commands), serialize(world), deserialize(text) in src/sim/index.ts. The game layer logs every command (src/game/commandLog.ts) for replays and bug reports.
+
+## Feel
+- Every feel value (input buffer, coyote time, hit-stop, shake, camera, UI timing) lives in data/feel.json with a range in the schema. Timing that changes outcomes is in the sim, in ticks; effects are in render/ui. See GAME-FEEL.md.
+- Prove timing rules with tick tests and check effects with a filmstrip you read. The human tunes values in the dev tuning panel; do not tune by your own taste.
+
+## Bugs and playtests
+- Every sim bug: a replay in tests/fixtures/replays/ (from the F8 bug report or written by hand) that fails before the fix and passes after it. Non-sim bugs: a Playwright test. No test, not fixed. See PLAYTEST-AND-BUGS.md and `/gamedev-kit:playtest`.
+- Playtest notes go to docs/playtests/; triage proposes, the human decides changes to rules, economy, scope and story.
 
 ## Art: reference first (default for every asset group)
 - Before building any final visual asset, generate options with <Nano Banana 2.1 | GPT Image 2.5> via tools/gen_image.py (provider: <gemini | openai | nanogpt | pixellab>), show the human a contact sheet, and wait for a pick.
@@ -498,7 +531,8 @@ For every task, tell the human which Claude model you recommend (Opus: coordinat
 ## Working rules
 - Touch only the files your task brief assigns to you.
 - Work in your own git worktree and branch (agent/<task-id>). Never commit to main. Never force-push.
-- Run `npm run check` before reporting done and paste the result.
+- Run `npm run check` before reporting done and paste the result. Hooks in .claude/settings.json typecheck and lint every edited file and block edits to generated folders.
+- Reviews go to the agents in .claude/agents/ (reviewer, art-director, perf-auditor); they see the diff, the spec and the check results, not your reasoning.
 - After changing gameplay, run `npm run bots` and summarise the report.
 - Every exploit or bug fixed gets a regression test.
 - Save format changes: bump the version, add a migration, add a fixture save.

@@ -21,8 +21,8 @@ lines.push('GAMEDEV-KIT BRIEFING (from the gamedev-kit plugin, enabled for this 
 if (source === 'compact' || source === 'resume') {
   lines.push(
     'This session was ' + (source === 'compact' ? 'compacted' : 'resumed') + '. The rules in ' + docs('START-HERE.md') +
-      ' still apply: English for everything, reference-first art, the animation decision guide, real pixel art cleanup (scripts + Sprite Grid), cost checks, the asset manifest, and a model recommendation per task.',
-    'If you no longer have the relevant kit sections in context, re-read them before continuing the current task.'
+      ' still apply: English for everything, reference-first art, the animation decision guide, real pixel art cleanup (scripts + Sprite Grid), cost checks, the asset manifest, feel as data, a test for every bug, and a model recommendation per task.',
+    'If you no longer have the relevant kit sections in context, re-read them (and docs/STATUS.md) before continuing the current task. End the session with /gamedev-kit:handoff.'
   );
 } else if (!isExisting) {
   lines.push(
@@ -33,7 +33,8 @@ if (source === 'compact' || source === 'resume') {
     '  3. ' + docs('AI-ASSET-WORKFLOW.md'),
     '  4. ' + docs('indie-game-development-guide.md'),
     '  5. ' + docs('STORY-AND-NARRATIVE.md'),
-    '  6. ' + docs('NANOGPT-API.md') + ' (overview now, the rest before the first generation call)',
+    '  6. ' + docs('GAME-FEEL.md'),
+    '  7. ' + docs('NANOGPT-API.md') + ' (overview now, the rest before the first generation call)',
     'Then give the human a short brief (max 10 lines): the rules you will follow, open questions, and the Claude model you recommend for the next step. Then continue with /gamedev-kit:new-game.',
     'Do this even if the human\'s first message asks you to start building right away; tell them you are reading the kit first.'
   );
@@ -41,11 +42,12 @@ if (source === 'compact' || source === 'resume') {
   lines.push(
     'This is an EXISTING GAME (docs/specs/000-stack.md exists). Before your first task in this session:',
     '  - read ' + docs('START-HERE.md') + ' (the standing rules);',
-    '  - read the project CLAUDE.md, docs/concept.md and every file in docs/specs/ (project decisions win over the kit);',
+    '  - read docs/STATUS.md first (where the project stands, what is next, what waits for the human), then the project CLAUDE.md, docs/concept.md and every file in docs/specs/ (project decisions win over the kit);',
     '  - for the task at hand, read the matching kit sections: art/animation -> ' + docs('AI-ASSET-WORKFLOW.md') +
-      '; architecture/testing/tooling -> ' + docs('GAME-STACK.md') + '; scope/release/marketing -> ' + docs('indie-game-development-guide.md') +
+      '; architecture/testing/tooling -> ' + docs('GAME-STACK.md') + ' (Godot: ' + docs('GODOT.md') + '); controls/combat/camera/juice -> ' + docs('GAME-FEEL.md') +
+      '; playtests/bugs -> ' + docs('PLAYTEST-AND-BUGS.md') + '; scope/release/marketing -> ' + docs('indie-game-development-guide.md') +
       '; story/dialogue/events -> ' + docs('STORY-AND-NARRATIVE.md') + '.',
-    'Re-read the full documents before a new asset group, a new major system or a stack change.'
+    'Re-read the full documents before a new asset group, a new major system or a stack change. End the session with /gamedev-kit:handoff (checks, docs/STATUS.md, commit).'
   );
 }
 lines.push('Everything in this project is in English: replies, code, docs, in-game text and all prompts for AI tools.');
